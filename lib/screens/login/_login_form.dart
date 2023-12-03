@@ -35,7 +35,7 @@ class _LoginFormState extends State<LoginForm> {
       const SnackBar(content: Text('Login Berhasil')),
     );
 
-    Get.toNamed(Routes.home);
+    Get.offAllNamed(Routes.home);
   }
 
   @override
