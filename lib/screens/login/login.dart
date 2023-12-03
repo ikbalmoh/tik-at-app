@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:tik_at_app/login/login_form.dart';
+import 'package:tik_at_app/screens/login/_login_form.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -22,16 +22,21 @@ class _LoginState extends State<Login> {
             ),
           ),
           ResponsiveBreakpoints.of(context).isMobile
-              ? const Padding(
-                  padding: EdgeInsets.all(15),
-                  child: LoginForm(),
+              ? const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(15),
+                      child: LoginForm(),
+                    ),
+                  ],
                 )
               : const Positioned(
                   right: 15,
                   top: 15,
                   bottom: 15,
                   child: SizedBox(
-                    width: 400,
+                    width: 350,
                     child: LoginForm(),
                   ),
                 ),
