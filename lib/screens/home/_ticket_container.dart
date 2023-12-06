@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:tik_at_app/screens/home/_ticket.dart';
+import 'package:tik_at_app/screens/home/components/ticket.dart';
 
 final List<String> _tickets = ['Dewasa', 'Anak-anak', 'Mancanegara'];
+
+final List<Color> _colors = [
+  Colors.orange.shade200,
+  Colors.blue.shade200,
+  Colors.pink.shade200,
+  Colors.green.shade200,
+  Colors.indigo.shade200
+];
 
 class TicketContainer extends StatelessWidget {
   const TicketContainer({super.key});
@@ -17,8 +24,11 @@ class TicketContainer extends StatelessWidget {
       mainAxisSpacing: 15,
       crossAxisSpacing: 15,
       childAspectRatio: 1.5,
-      children: _tickets.map((ticketName) {
-        return Ticket(ticketName: ticketName);
+      children: _tickets.asMap().entries.map((ticket) {
+        return Ticket(
+          ticketName: ticket.value,
+          color: _colors[ticket.key],
+        );
       }).toList(),
     );
   }

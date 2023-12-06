@@ -1,41 +1,41 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tik_at_app/routes/routes.dart';
+import 'package:tik_at_app/modules/auth/auth.dart';
 
 class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
+  const LoginForm({Key? key}) : super(key: key);
 
   @override
   State<LoginForm> createState() => _LoginFormState();
 }
 
 class _LoginFormState extends State<LoginForm> {
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
+  AuthController authController = Get.find();
+  final TextEditingController _usernameController = TextEditingController();
+
+  final TextEditingController _passwordController = TextEditingController();
 
   bool passwordHidden = true;
 
   void _onLogin(BuildContext context) async {
-    FocusScope.of(context).unfocus();
+    try {
+      FocusScope.of(context).unfocus();
 
-    final username = _usernameController.text;
-    final password = _passwordController.text;
+      final username = _usernameController.text;
+      final password = _passwordController.text;
 
-    final empty = username.isEmpty || password.isEmpty;
+      final empty = username.isEmpty || password.isEmpty;
 
-    if (empty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Isi username dan password!')),
-      );
-      return;
+      if (empty) {
+        Get.snackbar('Login Gagal', 'Isi username dan password!');
+        return;
+      }
+
+      authController.login(username, password);
+    } catch (e) {
+      _passwordController.clear();
     }
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Login Berhasil')),
-    );
-
-    Get.offAllNamed(Routes.home);
   }
 
   @override
@@ -110,8 +110,11 @@ class _LoginFormState extends State<LoginForm> {
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size.fromHeight(50),
               ),
-              onPressed: () => _onLogin(context),
-              child: const Text('LOGIN'),
+              onPressed: authController.state is AuthLoading
+                  ? null
+                  : () => _onLogin(context),
+              child: Text(
+                  authController.state is AuthLoading ? 'LOGIN ...' : 'LOGIN'),
             ),
           ],
         ),

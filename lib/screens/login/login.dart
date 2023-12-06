@@ -2,14 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:tik_at_app/screens/login/_login_form.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class Login extends StatelessWidget {
+  const Login({Key? key}) : super(key: key);
 
-  @override
-  State<Login> createState() => _LoginState();
-}
-
-class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

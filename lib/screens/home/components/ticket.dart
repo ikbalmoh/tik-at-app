@@ -3,13 +3,14 @@ import 'package:google_fonts/google_fonts.dart';
 
 class Ticket extends StatelessWidget {
   final String ticketName;
+  final Color color;
 
-  const Ticket({super.key, required this.ticketName});
+  const Ticket({super.key, required this.ticketName, required this.color});
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.amber.shade200,
+      color: color,
       child: InkWell(
         onTap: () {},
         child: Padding(
