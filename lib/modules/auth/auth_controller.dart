@@ -14,11 +14,11 @@ class AuthController extends GetxController {
 
   final AuthService _service;
 
+  AuthController(this._service);
+
   final _authState = const AuthState().obs;
 
   AuthState get state => _authState.value;
-
-  AuthController(this._service);
 
   @override
   void onInit() {

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tik_at_app/models/ticket.dart';
 
-class Ticket extends StatelessWidget {
-  final String ticketName;
+class TicketItem extends StatelessWidget {
+  final Ticket ticket;
   final Color color;
 
-  const Ticket({super.key, required this.ticketName, required this.color});
+  const TicketItem({super.key, required this.ticket, required this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class Ticket extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           child: Center(
             child: Text(
-              ticketName,
+              ticket.name,
               style: GoogleFonts.varelaRound(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,

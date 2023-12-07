@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
-import 'package:tik_at_app/modules/auth/auth.dart';
 import 'package:tik_at_app/routes/middleware.dart';
+import 'package:tik_at_app/modules/auth/auth.dart';
+import 'package:tik_at_app/modules/ticket/ticket.dart';
 
 import 'package:tik_at_app/screens/splash_screen.dart';
 import 'package:tik_at_app/screens/login/login.dart';
@@ -26,6 +27,7 @@ List<GetPage> routes = [
   GetPage(
     name: Routes.home,
     page: () => const Home(),
+    binding: TicketBindings(),
     middlewares: [AuthenticatedMiddleware()],
   ),
 ];
