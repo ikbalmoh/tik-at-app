@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_storage/get_storage.dart';
 
+final GetStorage box = GetStorage();
+
 Dio fetch({bool ignoreBaseUrl = false}) {
   Dio dio = Dio();
 
@@ -16,8 +18,6 @@ Dio fetch({bool ignoreBaseUrl = false}) {
 
 class CustomInterceptors extends Interceptor {
   Dio dio;
-
-  final GetStorage box = GetStorage();
 
   CustomInterceptors({required this.dio});
 

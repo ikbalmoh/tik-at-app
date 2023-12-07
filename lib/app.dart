@@ -8,7 +8,9 @@ import 'package:flutter/services.dart';
 import 'package:tik_at_app/utils/theme.dart';
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  final bool hasToken;
+
+  const App({required this.hasToken, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +37,8 @@ class App extends StatelessWidget {
         ],
         child: child!,
       ),
-      initialRoute: Routes.root,
-      initialBinding: BindingsBuilder(() {
-        AuthController authController = Get.put(AuthController(AuthService()));
-        authController.init();
-      }),
+      initialRoute: hasToken ? Routes.home : Routes.login,
+      initialBinding: AuthBindings(),
       getPages: routes,
     );
   }

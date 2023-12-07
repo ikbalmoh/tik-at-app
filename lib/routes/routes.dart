@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'middleware.dart';
 import 'package:tik_at_app/modules/auth/auth.dart';
+import 'package:tik_at_app/routes/middleware.dart';
 
 import 'package:tik_at_app/screens/splash_screen.dart';
 import 'package:tik_at_app/screens/login/login.dart';
@@ -12,15 +12,15 @@ class Routes {
   static const String home = '/home';
 }
 
-final List<GetPage> routes = [
+List<GetPage> routes = [
   GetPage(
     name: Routes.root,
     page: () => const SplashScreen(),
-    // binding: AuthBindings(),
   ),
   GetPage(
     name: Routes.login,
     page: () => const Login(),
+    binding: AuthBindings(),
     middlewares: [AuthenticatedMiddleware()],
   ),
   GetPage(

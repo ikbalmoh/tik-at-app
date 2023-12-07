@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:tik_at_app/app.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:tik_at_app/modules/auth/auth.dart';
+import 'package:get/get.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+Future initServices() async {
+  if (kDebugMode) {
+    print('initializing app ...');
+  }
 
   await GetStorage.init();
 
@@ -34,5 +38,20 @@ Future<void> main() async {
   GetStorage box = GetStorage();
   box.write('device', deviceName);
 
-  runApp(const App());
+  Get.put(AuthController(AuthService()));
+
+  if (kDebugMode) {
+    print('App inititalized');
+  }
+}
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await initServices();
+  GetStorage box = GetStorage();
+
+  runApp(App(
+    hasToken: box.hasData('token'),
+  ));
 }

@@ -20,13 +20,19 @@ class AuthController extends GetxController {
 
   AuthController(this._service);
 
+  @override
+  void onInit() {
+    init();
+    super.onInit();
+  }
+
   Future init() async {
     _authState.value = AuthInitial();
     final token = box.read('token');
     if (kDebugMode) {
       print('USER TOKEN: $token');
     }
-    if (token != null) {
+    if (box.hasData('token')) {
       _getAuthenticatedUser();
     } else {
       _authState.value = UnAuthenticated();
