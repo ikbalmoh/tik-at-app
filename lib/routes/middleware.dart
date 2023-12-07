@@ -19,6 +19,8 @@ class AuthenticatedMiddleware extends GetMiddleware {
       return [Routes.root, Routes.login].contains(route)
           ? const RouteSettings(name: Routes.home)
           : null;
+    } else if (route == Routes.login) {
+      return null;
     }
 
     return const RouteSettings(name: Routes.login);
