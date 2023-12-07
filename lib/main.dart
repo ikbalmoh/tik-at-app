@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 
 Future initServices() async {
   if (kDebugMode) {
-    print('initializing app ...');
+    print('INITIALIZING APP ...');
   }
 
   await GetStorage.init();
@@ -41,7 +41,7 @@ Future initServices() async {
   Get.put(AuthController(AuthService()));
 
   if (kDebugMode) {
-    print('App inititalized');
+    print('APP INITIALIZED');
   }
 }
 

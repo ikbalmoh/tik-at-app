@@ -97,9 +97,29 @@ class AuthController extends GetxController {
   }
 
   Future logout() async {
-    _authState.value = AuthInitial();
+    Get.defaultDialog(
+      backgroundColor: Colors.white,
+      titlePadding: const EdgeInsets.only(top: 20),
+      contentPadding: const EdgeInsets.all(20),
+      title: 'Logout',
+      content: const Text('Apakah Anda ingin keluar dari aplikasi?'),
+      confirm: TextButton(
+        onPressed: () {
+          _authState.value = AuthInitial();
 
-    box.remove('user');
-    box.remove('token');
+          box.remove('user');
+          box.remove('token');
+
+          Get.offAllNamed(Routes.login);
+        },
+        style: TextButton.styleFrom(foregroundColor: Colors.red),
+        child: const Text('Logout'),
+      ),
+      cancel: TextButton(
+        onPressed: () => Get.back(),
+        style: TextButton.styleFrom(foregroundColor: Colors.grey.shade800),
+        child: const Text('Tidak'),
+      ),
+    );
   }
 }

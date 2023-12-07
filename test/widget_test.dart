@@ -8,13 +8,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tik_at_app/app.dart';
-import 'package:tik_at_app/routes/routes.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const App(
-      initialRoute: Routes.root,
+      hasToken: true,
     ));
 
     // Verify that our counter starts at 0.
