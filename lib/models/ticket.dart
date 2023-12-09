@@ -1,20 +1,25 @@
+import 'package:flutter/material.dart';
+
 class Ticket {
   final int id;
   final String name;
   final String description;
   final double price;
+  final Color? color;
 
   Ticket({
     required this.id,
     required this.name,
     required this.description,
     required this.price,
+    this.color,
   });
 
   Ticket.fromJson(Map<dynamic, dynamic> json)
       : id = int.tryParse(json['id']?.toString() ?? '') ?? 0,
         name = json['name']?.toString() ?? '',
         description = json['description']?.toString() ?? '',
+        color = Color(json['color']),
         price = json['price'] ?? 0;
 
   Map<String, dynamic> toJson() =>

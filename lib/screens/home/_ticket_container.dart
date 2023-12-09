@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tik_at_app/models/ticket.dart';
 import 'package:tik_at_app/modules/ticket/ticket.dart';
+import 'package:tik_at_app/screens/home/components/add_ticket_dialog.dart';
 import 'package:tik_at_app/screens/home/components/ticket_item.dart';
-
-final List<Color> _colors = [
-  Colors.orange.shade200,
-  Colors.blue.shade200,
-  Colors.pink.shade200,
-  Colors.green.shade200,
-  Colors.indigo.shade200
-];
 
 class TicketContainer extends StatefulWidget {
   const TicketContainer({super.key});
@@ -21,6 +15,12 @@ class TicketContainer extends StatefulWidget {
 class _TicketContainerState extends State<TicketContainer> {
   TicketController controller = Get.find();
 
+  void selectTicket(Ticket ticket) {
+    Get.dialog(AddTicketDialog(
+      ticket: ticket,
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -31,20 +31,37 @@ class _TicketContainerState extends State<TicketContainer> {
         );
       } else if (controller.state is TicketLoaded) {
         TicketLoaded state = controller.state as TicketLoaded;
-        return GridView.count(
-          padding: const EdgeInsets.all(15),
-          physics: const ScrollPhysics(),
-          shrinkWrap: false,
-          crossAxisCount: 3,
-          mainAxisSpacing: 15,
-          crossAxisSpacing: 15,
-          childAspectRatio: 1.5,
-          children: state.tickets.asMap().entries.map((ticket) {
-            return TicketItem(
-              ticket: ticket.value,
-              color: _colors[ticket.key],
-            );
-          }).toList(),
+        return Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
+              child: Text(
+                'Pilih Tiket',
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      color: Colors.grey.shade700,
+                    ),
+              ),
+            ),
+            Expanded(
+                child: GridView.count(
+              padding: const EdgeInsets.all(15),
+              physics: const ScrollPhysics(),
+              shrinkWrap: false,
+              crossAxisCount: 3,
+              mainAxisSpacing: 15,
+              crossAxisSpacing: 15,
+              childAspectRatio: 1.5,
+              children: state.tickets.asMap().entries.map((ticket) {
+                return TicketItem(
+                  ticket: ticket.value,
+                  onPress: () => selectTicket(ticket.value),
+                );
+              }).toList(),
+            ))
+          ],
         );
       }
       return const Center(

@@ -18,8 +18,11 @@ ThemeData appTheme(BuildContext context) {
       ),
     ),
     textTheme: TextTheme(
+      headlineSmall: GoogleFonts.varelaRound(
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
       bodyLarge: GoogleFonts.varelaRound(),
-      headlineSmall: GoogleFonts.varelaRound(),
       bodyMedium: GoogleFonts.varelaRound(),
       labelLarge: GoogleFonts.varelaRound(fontWeight: FontWeight.w600),
     ),

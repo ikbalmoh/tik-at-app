@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:tik_at_app/models/ticket.dart';
 import 'package:tik_at_app/modules/ticket/ticket.dart';
+import 'package:tik_at_app/data/colors.dart';
 
 class TicketController extends GetxController {
   final GetStorage box = GetStorage();
@@ -24,21 +25,15 @@ class TicketController extends GetxController {
   Future loadTickets() async {
     try {
       List<Ticket> tickets = [];
-      if (box.hasData('tickets')) {
-        final data = box.read('tickets');
+      _state.value = TicketLoading();
+      final List<dynamic> data = await _service.loadTickets();
+      box.write('tickets', data);
+      for (final json in data) {
+        json['color'] = colors[json['id']] ?? 0xffbee3db;
         if (kDebugMode) {
-          print('SAVED TICKET: $data');
+          print(json);
         }
-        for (var json in data) {
-          tickets.add(Ticket.fromJson(json));
-        }
-      } else {
-        _state.value = TicketLoading();
-        final List<dynamic> data = await _service.loadTickets();
-        box.write('tickets', data);
-        for (var json in data) {
-          tickets.add(Ticket.fromJson(json));
-        }
+        tickets.add(Ticket.fromJson(json));
       }
       _state.value = TicketLoaded(tickets: tickets);
     } on DioException catch (e) {

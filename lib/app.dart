@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tik_at_app/modules/auth/auth.dart';
@@ -28,6 +29,7 @@ class App extends StatelessWidget {
 
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
+      enableLog: kDebugMode,
       title: 'eTiket Situ Bagendit',
       theme: appTheme(context),
       builder: (context, child) => ResponsiveBreakpoints.builder(
