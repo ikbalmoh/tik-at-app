@@ -23,8 +23,8 @@ class TicketController extends GetxController {
   }
 
   Future loadTickets() async {
+    List<Ticket> tickets = [];
     try {
-      List<Ticket> tickets = [];
       _state.value = TicketLoading();
       final List<dynamic> data = await _service.loadTickets();
       box.write('tickets', data);
@@ -39,6 +39,14 @@ class TicketController extends GetxController {
     } on DioException catch (e) {
       String message = e.response?.data['message'] ?? e.message;
       _state.value = TicketFailure(message: message);
+      if (box.hasData('tickets')) {
+        final List<dynamic> savedTickets = box.read('tickets');
+        for (final json in savedTickets) {
+          json['color'] = colors[json['id']] ?? 0xffbee3db;
+          tickets.add(Ticket.fromJson(json));
+          _state.value = TicketLoaded(tickets: tickets);
+        }
+      }
     }
   }
 }

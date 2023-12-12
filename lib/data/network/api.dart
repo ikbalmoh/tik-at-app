@@ -34,4 +34,9 @@ class Api {
     final res = await api.get(ApiUrl.ticketTypes);
     return res.data;
   }
+
+  Future transaction(Object data) async {
+    final res = await api.post(ApiUrl.transaction, data: data);
+    return res.data;
+  }
 }

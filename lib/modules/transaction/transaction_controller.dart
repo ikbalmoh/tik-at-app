@@ -1,22 +1,29 @@
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tik_at_app/models/ticket.dart';
 import 'package:tik_at_app/models/transaction.dart';
+import 'package:tik_at_app/modules/transaction/transaction.dart';
 
 class TransactionController extends GetxController {
-  TransactionController();
+  final TransactionService _service;
+
+  TransactionController(this._service);
 
   final tickets = <TransactionItem>[].obs;
   final subtotal = (0.0).obs;
   final discount = (0.0).obs;
-  final total = (0.0).obs;
-  final loading = false.obs;
+  final grandTotal = (0.0).obs;
+
+  final _loading = false.obs;
+  bool get loading => _loading.value;
 
   void selectTicket(Ticket ticket, int qty) {
     if (qty < 1) {
       return removeTicket(ticket.id, false);
     }
-    int idx = tickets.indexWhere((t) => t.id == ticket.id);
+    int idx = tickets.indexWhere((t) => t.ticketTypeId == ticket.id);
     double discount = 0;
     if (idx > -1) {
       TransactionItem item = tickets[idx];
@@ -28,7 +35,7 @@ class TransactionController extends GetxController {
     } else {
       tickets.add(
         TransactionItem(
-          id: ticket.id,
+          ticketTypeId: ticket.id,
           name: ticket.name,
           price: ticket.price,
           qty: qty,
@@ -69,7 +76,7 @@ class TransactionController extends GetxController {
         ),
       );
     } else {
-      tickets.removeWhere((t) => t.id == id);
+      tickets.removeWhere((t) => t.ticketTypeId == id);
       calculateTransaction();
     }
   }
@@ -80,11 +87,50 @@ class TransactionController extends GetxController {
       subTotal += ticket.subtotal;
     }
     subtotal.value = subTotal;
-    total.value = subTotal;
+    grandTotal.value = subTotal;
   }
 
   void resetTransaction() {
     tickets.clear();
     Get.snackbar('Transaksi Direset', 'Silahkan memulai transaksi baru');
+  }
+
+  void submitTransaction(String paymentMethod, double pay, String refNo) async {
+    _loading.value = true;
+    try {
+      double charge = 0;
+      if (paymentMethod == 'cash' && pay > grandTotal.value) {
+        charge = pay - grandTotal.value;
+      }
+      final Transaction transaction = Transaction(
+        isGroup: false,
+        grandTotal: grandTotal.value,
+        pay: pay,
+        charge: charge,
+        paymentMethod: paymentMethod,
+        tickets: tickets,
+      );
+      final data = await _service.postTransaction(transaction.toJson());
+      _loading.value = false;
+      Get.back();
+      Get.snackbar(
+        data["message"],
+        'Mencetak ${data["tickets"].length} tiket...',
+        duration: const Duration(seconds: 5),
+      );
+    } on DioException catch (e) {
+      _loading.value = false;
+      String message = e.response?.data['message'] ?? e.message;
+      Get.snackbar(
+        'Transaksi Tiket Gagal',
+        message,
+        backgroundColor: Colors.red.shade50,
+      );
+    } catch (e) {
+      _loading.value = false;
+      if (kDebugMode) {
+        print('Transaction Error: $e');
+      }
+    }
   }
 }

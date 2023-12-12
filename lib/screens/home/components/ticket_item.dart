@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:tik_at_app/models/ticket.dart';
+import 'package:tik_at_app/utils/utils.dart';
 
 class TicketItem extends StatelessWidget {
   final Ticket ticket;
@@ -23,7 +23,7 @@ class TicketItem extends StatelessWidget {
               children: [
                 Text(
                   ticket.name,
-                  style: GoogleFonts.varelaRound(
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
                     color: Colors.black87,
@@ -33,8 +33,8 @@ class TicketItem extends StatelessWidget {
                   height: 5,
                 ),
                 Text(
-                  ticket.price.toString(),
-                  style: GoogleFonts.varelaRound(
+                  CurrencyFormat.idr(ticket.price, 0),
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                     color: Colors.black54,

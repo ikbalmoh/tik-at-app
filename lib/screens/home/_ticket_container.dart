@@ -16,9 +16,12 @@ class _TicketContainerState extends State<TicketContainer> {
   TicketController controller = Get.find();
 
   void selectTicket(Ticket ticket) {
-    Get.dialog(AddTicketDialog(
-      ticket: ticket,
-    ));
+    Get.dialog(
+      AddTicketDialog(
+        ticket: ticket,
+      ),
+      barrierDismissible: false,
+    );
   }
 
   @override

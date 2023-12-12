@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tik_at_app/modules/transaction/transaction.dart';
 import 'package:tik_at_app/screens/home/components/cart_item.dart';
+import 'package:tik_at_app/utils/utils.dart';
+import 'components/checkout_dialog.dart';
 
 class Cart extends StatefulWidget {
   const Cart({super.key});
@@ -13,6 +15,13 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
   TransactionController controller = Get.find();
+
+  void openPayment() {
+    Get.dialog(
+      const CheckoutDialog(),
+      barrierDismissible: false,
+    );
+  }
 
   Widget summary(String label, String value, TextTheme textTheme) {
     return Padding(
@@ -52,7 +61,7 @@ class _CartState extends State<Cart> {
                           (item) => CartItem(
                             item: item.value,
                             onDelete: () => controller.removeTicket(
-                              item.value.id,
+                              item.value.ticketTypeId,
                               true,
                             ),
                           ),
@@ -62,11 +71,17 @@ class _CartState extends State<Cart> {
                 ),
                 Container(
                   decoration: const BoxDecoration(
-                      border: Border(
-                          top: BorderSide(
-                    width: 0.5,
-                    color: Colors.black12,
-                  ))),
+                    border: Border(
+                      top: BorderSide(
+                        width: 0.5,
+                        color: Colors.black12,
+                      ),
+                      bottom: BorderSide(
+                        width: 0.5,
+                        color: Colors.black12,
+                      ),
+                    ),
+                  ),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 15,
                     vertical: 10,
@@ -75,21 +90,44 @@ class _CartState extends State<Cart> {
                     children: [
                       summary(
                         'Subtotal',
-                        controller.subtotal.toString(),
+                        CurrencyFormat.idr(controller.subtotal.toDouble(), 0),
                         textTheme,
                       ),
                       summary(
                         'Total Diskon',
-                        controller.discount.toString(),
+                        CurrencyFormat.idr(controller.discount.toDouble(), 0),
                         textTheme,
                       ),
-                      summary(
-                        'Total',
-                        controller.total.toString(),
-                        textTheme,
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 15,
+                    vertical: 15,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Total',
+                            style: textTheme.bodyMedium
+                                ?.copyWith(color: Colors.black),
+                          ),
+                          Text(
+                            CurrencyFormat.idr(
+                                controller.grandTotal.toDouble(), 0),
+                            style: textTheme.headlineSmall
+                                ?.copyWith(color: Colors.black),
+                          )
+                        ],
                       ),
                       const SizedBox(
-                        height: 10,
+                        height: 15,
                       ),
                       Row(
                         children: [
@@ -105,7 +143,7 @@ class _CartState extends State<Cart> {
                             ),
                             label: const Text('RESET'),
                           ),
-                          const SizedBox(width: 10),
+                          const SizedBox(width: 15),
                           Expanded(
                             child: ElevatedButton(
                               style: TextButton.styleFrom(
@@ -113,14 +151,11 @@ class _CartState extends State<Cart> {
                                 backgroundColor: Colors.green.shade50,
                                 padding: const EdgeInsets.all(15),
                               ),
-                              onPressed: () {},
+                              onPressed: () => openPayment(),
                               child: const Text('PEMBAYARAN'),
                             ),
                           ),
                         ],
-                      ),
-                      const SizedBox(
-                        height: 10,
                       ),
                     ],
                   ),

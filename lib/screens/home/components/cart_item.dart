@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tik_at_app/models/transaction.dart';
+import 'package:tik_at_app/utils/utils.dart';
 
 class CartItem extends StatelessWidget {
   const CartItem({
@@ -42,7 +43,7 @@ class CartItem extends StatelessWidget {
             ),
             Expanded(child: Text(item.name)),
             Text(
-              item.total.toString(),
+              CurrencyFormat.idr(item.total, 0),
               style: textTheme.bodyMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),

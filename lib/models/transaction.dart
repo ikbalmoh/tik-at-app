@@ -1,5 +1,5 @@
 class TransactionItem {
-  int id;
+  int ticketTypeId;
   String name;
   double price;
   int qty;
@@ -8,7 +8,7 @@ class TransactionItem {
   double total;
 
   TransactionItem({
-    required this.id,
+    required this.ticketTypeId,
     required this.name,
     required this.price,
     required this.qty,
@@ -16,6 +16,21 @@ class TransactionItem {
     required this.subtotal,
     required this.total,
   });
+
+  Map<String, dynamic> toJson() => {
+        'ticket_type_id': ticketTypeId,
+        'name': name,
+        'price': price,
+        'qty': qty,
+        'discount': discount,
+        'subtotal': subtotal,
+        'total': total,
+      };
+
+  @override
+  String toString() {
+    return '{"ticket_type_id": $ticketTypeId, "name": $name, "price": $price, "qty": $qty, "discount": $discount, "subtotal": $subtotal, "total": $total}';
+  }
 }
 
 class Transaction {
@@ -36,4 +51,19 @@ class Transaction {
     this.paymentRef,
     required this.tickets,
   });
+
+  @override
+  String toString() {
+    return '{"is_group": $isGroup, "pay": $pay, "charge": $charge, "payment_method": $paymentMethod, "payment_ref": $paymentRef, "grand_total": $grandTotal, "tickets": $tickets}';
+  }
+
+  Map<String, dynamic> toJson() => {
+        'is_group': isGroup,
+        'pay': pay,
+        'charge': charge,
+        'payment_method': paymentMethod,
+        'payment_ref': paymentRef,
+        'grand_total': grandTotal,
+        'tickets': tickets.map((ticket) => ticket.toJson()).toList()
+      };
 }

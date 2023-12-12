@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:tik_at_app/models/ticket.dart';
 import 'package:tik_at_app/models/transaction.dart';
 import 'package:tik_at_app/modules/transaction/transaction_controller.dart';
+import 'package:tik_at_app/utils/utils.dart';
 
 class AddTicketDialog extends StatefulWidget {
   const AddTicketDialog({super.key, required this.ticket});
@@ -23,7 +24,8 @@ class _AddTicketDialogState extends State<AddTicketDialog> {
 
   @override
   void initState() {
-    item = controller.tickets.firstWhereOrNull((t) => t.id == widget.ticket.id);
+    item = controller.tickets
+        .firstWhereOrNull((t) => t.ticketTypeId == widget.ticket.id);
     qty.text = (item == null ? '1' : item?.qty.toString())!;
     qtyFocusNode.requestFocus();
 
@@ -105,7 +107,7 @@ class _AddTicketDialogState extends State<AddTicketDialog> {
             ),
             rowField(
               'Harga Tiket',
-              widget.ticket.price.toString(),
+              CurrencyFormat.idr(widget.ticket.price, 0),
               textTheme,
             ),
             const SizedBox(
@@ -137,7 +139,7 @@ class _AddTicketDialogState extends State<AddTicketDialog> {
             Container(
               margin: const EdgeInsets.only(top: 20),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   TextButton(
