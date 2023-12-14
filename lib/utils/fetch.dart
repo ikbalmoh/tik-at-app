@@ -7,22 +7,24 @@ final GetStorage box = GetStorage();
 Dio fetch({bool ignoreBaseUrl = false}) {
   Dio dio = Dio();
 
-  if (!ignoreBaseUrl) {
-    dio.options.baseUrl = 'http://tik-at.test/api';
-  }
-
-  dio.interceptors.add(CustomInterceptors(dio: dio));
+  dio.interceptors
+      .add(CustomInterceptors(dio: dio, ignoreBaseUrl: ignoreBaseUrl));
 
   return dio;
 }
 
 class CustomInterceptors extends Interceptor {
   Dio dio;
+  bool ignoreBaseUrl;
 
-  CustomInterceptors({required this.dio});
+  CustomInterceptors({required this.dio, required this.ignoreBaseUrl});
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    if (!ignoreBaseUrl && box.hasData('api')) {
+      String apiUrl = box.read('api');
+      options.baseUrl = '$apiUrl/api';
+    }
     if (kDebugMode) {
       print(
           'REQUEST[${options.method}]\n => PATH: ${options.path}\n => DATA: ${options.data}');

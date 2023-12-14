@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:tik_at_app/modules/setting/setting.dart';
 import 'package:tik_at_app/modules/transaction/transaction.dart';
 import 'package:tik_at_app/routes/middleware.dart';
 import 'package:tik_at_app/modules/auth/auth.dart';
@@ -17,18 +18,19 @@ class Routes {
 List<GetPage> routes = [
   GetPage(
     name: Routes.root,
+    bindings: [SettingBindings()],
     page: () => const SplashScreen(),
   ),
   GetPage(
     name: Routes.login,
     page: () => const Login(),
-    binding: AuthBindings(),
+    bindings: [SettingBindings(), AuthBindings()],
     middlewares: [AuthenticatedMiddleware()],
   ),
   GetPage(
     name: Routes.home,
     page: () => const Home(),
-    bindings: [TicketBindings(), TransactionBindings()],
+    bindings: [SettingBindings(), TicketBindings(), TransactionBindings()],
     middlewares: [AuthenticatedMiddleware()],
   ),
 ];

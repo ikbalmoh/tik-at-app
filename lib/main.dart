@@ -5,6 +5,7 @@ import 'package:tik_at_app/app.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:tik_at_app/modules/auth/auth.dart';
 import 'package:get/get.dart';
+import 'package:tik_at_app/modules/setting/setting.dart';
 
 Future initServices() async {
   if (kDebugMode) {
@@ -36,19 +37,25 @@ Future initServices() async {
   }
 
   GetStorage box = GetStorage();
+
   box.write('device', deviceName);
 
+  Get.put(SettingController(SettingService()));
   Get.put(AuthController(AuthService()));
 
   if (kDebugMode) {
     print('APP INITIALIZED');
   }
+
+  final bool hasApi = box.hasData('api');
+  return hasApi;
 }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await initServices();
+
   GetStorage box = GetStorage();
 
   runApp(App(
