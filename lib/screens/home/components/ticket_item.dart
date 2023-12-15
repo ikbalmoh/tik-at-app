@@ -5,8 +5,13 @@ import 'package:tik_at_app/utils/utils.dart';
 class TicketItem extends StatelessWidget {
   final Ticket ticket;
   final Function onPress;
+  final int qtyCart;
 
-  const TicketItem({super.key, required this.ticket, required this.onPress});
+  const TicketItem(
+      {super.key,
+      required this.ticket,
+      required this.onPress,
+      required this.qtyCart});
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +26,19 @@ class TicketItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  ticket.name,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
+                Badge(
+                  isLabelVisible: qtyCart > 0,
+                  label: Text(
+                    qtyCart.toString(),
+                  ),
+                  offset: const Offset(20, 0),
+                  child: Text(
+                    ticket.name,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                    ),
                   ),
                 ),
                 const SizedBox(

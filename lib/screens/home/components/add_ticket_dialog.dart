@@ -4,6 +4,7 @@ import 'package:tik_at_app/models/ticket.dart';
 import 'package:tik_at_app/models/transaction.dart';
 import 'package:tik_at_app/modules/transaction/transaction_controller.dart';
 import 'package:tik_at_app/utils/utils.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class AddTicketDialog extends StatefulWidget {
   const AddTicketDialog({super.key, required this.ticket});
@@ -34,7 +35,7 @@ class _AddTicketDialogState extends State<AddTicketDialog> {
 
   void submit() {
     controller.selectTicket(widget.ticket, int.parse(qty.text));
-    Get.back();
+    Get.back(closeOverlays: true);
   }
 
   Row rowField(String label, dynamic content, TextTheme textTheme) => Row(
@@ -57,9 +58,11 @@ class _AddTicketDialogState extends State<AddTicketDialog> {
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
+    bool isMobile = ResponsiveBreakpoints.of(context).isMobile;
+
     return Dialog(
       child: Container(
-        width: 400,
+        width: isMobile ? double.infinity : 400,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),

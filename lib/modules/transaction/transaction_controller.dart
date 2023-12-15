@@ -57,7 +57,7 @@ class TransactionController extends GetxController {
           actions: [
             TextButton(
               onPressed: () {
-                Get.back();
+                Get.back(closeOverlays: true);
                 removeTicket(id, false);
               },
               child: const Text(
@@ -90,8 +90,9 @@ class TransactionController extends GetxController {
     grandTotal.value = subTotal;
   }
 
-  void resetTransaction() {
+  void resetTransaction({bool snackbar = true}) {
     tickets.clear();
+    calculateTransaction();
     Get.snackbar('Transaksi Direset', 'Silahkan memulai transaksi baru');
   }
 
@@ -112,12 +113,13 @@ class TransactionController extends GetxController {
       );
       final data = await _service.postTransaction(transaction.toJson());
       _loading.value = false;
-      Get.back();
+      Get.back(closeOverlays: true);
       Get.snackbar(
         data["message"],
         'Mencetak ${data["tickets"].length} tiket...',
         duration: const Duration(seconds: 5),
       );
+      resetTransaction(snackbar: false);
     } on DioException catch (e) {
       _loading.value = false;
       String message = e.response?.data['message'] ?? e.message;

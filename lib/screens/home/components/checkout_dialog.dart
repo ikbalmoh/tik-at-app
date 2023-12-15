@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:tik_at_app/components/payment_method_button.dart';
 import 'package:tik_at_app/modules/transaction/transaction.dart';
 import 'package:tik_at_app/utils/utils.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class CheckoutDialog extends StatefulWidget {
   const CheckoutDialog({super.key});
@@ -82,11 +83,12 @@ class _CheckoutDialogState extends State<CheckoutDialog> {
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
+    bool isMobile = ResponsiveBreakpoints.of(context).isMobile;
 
     return Obx(
       () => Dialog(
         child: Container(
-          width: 400,
+          width: isMobile ? double.infinity : 400,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(15),

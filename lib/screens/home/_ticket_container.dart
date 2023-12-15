@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:tik_at_app/models/ticket.dart';
 import 'package:tik_at_app/modules/ticket/ticket.dart';
+import 'package:tik_at_app/modules/transaction/transaction.dart';
 import 'package:tik_at_app/screens/home/components/add_ticket_dialog.dart';
 import 'package:tik_at_app/screens/home/components/ticket_item.dart';
 
@@ -14,6 +16,7 @@ class TicketContainer extends StatefulWidget {
 
 class _TicketContainerState extends State<TicketContainer> {
   TicketController controller = Get.find();
+  TransactionController transactionController = Get.find();
 
   void selectTicket(Ticket ticket) {
     Get.dialog(
@@ -53,7 +56,8 @@ class _TicketContainerState extends State<TicketContainer> {
               padding: const EdgeInsets.all(15),
               physics: const ScrollPhysics(),
               shrinkWrap: false,
-              crossAxisCount: 3,
+              crossAxisCount:
+                  ResponsiveBreakpoints.of(context).isMobile ? 1 : 3,
               mainAxisSpacing: 15,
               crossAxisSpacing: 15,
               childAspectRatio: 1.5,
@@ -61,6 +65,11 @@ class _TicketContainerState extends State<TicketContainer> {
                 return TicketItem(
                   ticket: ticket.value,
                   onPress: () => selectTicket(ticket.value),
+                  qtyCart: transactionController.tickets
+                          .firstWhereOrNull(
+                              (t) => t.ticketTypeId == ticket.value.id)
+                          ?.qty ??
+                      0,
                 );
               }).toList(),
             ))
