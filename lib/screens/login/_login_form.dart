@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tik_at_app/modules/auth/auth.dart';
 import 'package:tik_at_app/modules/setting/setting_controller.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
@@ -53,100 +54,107 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
+    bool isMobile = ResponsiveBreakpoints.of(context).isMobile;
+
     return Obx(
       () => Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(15)),
+          borderRadius: const BorderRadius.all(Radius.circular(15)),
           boxShadow: [
             BoxShadow(
-              blurRadius: 5,
+              blurRadius: isMobile ? 0 : 5,
               color: Colors.black12,
             )
           ],
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(30.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Spacer(),
-              Image.asset(
-                'assets/images/ticket.png',
-                height: 50,
+        padding: const EdgeInsets.all(30.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            isMobile
+                ? const SizedBox(
+                    height: 20,
+                  )
+                : const Spacer(),
+            Image.asset(
+              'assets/images/ticket.png',
+              height: 50,
+            ),
+            const SizedBox(height: 5),
+            Text(
+              'eTiket Situ Bagendit',
+              style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 50),
+            Text(
+              'Selamat Datang',
+              style: textTheme.headlineSmall,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 15),
+            Text(
+              'Silahkan gunakan akun operator untuk login',
+              style:
+                  textTheme.bodyMedium?.copyWith(color: Colors.grey.shade700),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 15),
+            TextFormField(
+              decoration: const InputDecoration(
+                labelText: 'username',
               ),
-              const SizedBox(height: 5),
-              Text(
-                'eTiket Situ Bagendit',
-                style:
-                    textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 50),
-              Text(
-                'Selamat Datang',
-                style: textTheme.headlineSmall,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 15),
-              Text(
-                'Silahkan gunakan akun operator untuk login',
-                style:
-                    textTheme.bodyMedium?.copyWith(color: Colors.grey.shade700),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 15),
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: 'username',
-                ),
-                controller: _usernameController,
-                readOnly: settingController.api.isEmpty,
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'password',
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        passwordHidden = !passwordHidden;
-                      });
-                    },
-                    icon: Icon(passwordHidden
-                        ? CupertinoIcons.eye_slash
-                        : CupertinoIcons.eye),
-                  ),
-                ),
-                controller: _passwordController,
-                obscureText: passwordHidden,
-                readOnly: settingController.api.isEmpty,
-              ),
-              const SizedBox(height: 40),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size.fromHeight(50),
-                ),
-                onPressed: authController.state is AuthLoading ||
-                        settingController.api.isEmpty
-                    ? null
-                    : () => _onLogin(context),
-                child: Text(authController.state is AuthLoading
-                    ? 'LOGIN ...'
-                    : 'LOGIN'),
-              ),
-              const Spacer(),
-              Badge(
-                isLabelVisible: settingController.api.isEmpty,
-                child: IconButton(
-                  onPressed: () => settingController.openApiSetting(),
-                  icon: const Icon(
-                    CupertinoIcons.gear,
-                  ),
+              controller: _usernameController,
+              readOnly: settingController.api.isEmpty,
+            ),
+            const SizedBox(height: 10),
+            TextFormField(
+              decoration: InputDecoration(
+                labelText: 'password',
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      passwordHidden = !passwordHidden;
+                    });
+                  },
+                  icon: Icon(passwordHidden
+                      ? CupertinoIcons.eye_slash
+                      : CupertinoIcons.eye),
                 ),
               ),
-            ],
-          ),
+              controller: _passwordController,
+              obscureText: passwordHidden,
+              readOnly: settingController.api.isEmpty,
+            ),
+            const SizedBox(height: 40),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size.fromHeight(50),
+              ),
+              onPressed: authController.state is AuthLoading ||
+                      settingController.api.isEmpty
+                  ? null
+                  : () => _onLogin(context),
+              child: Text(
+                  authController.state is AuthLoading ? 'LOGIN ...' : 'LOGIN'),
+            ),
+            isMobile
+                ? const SizedBox(
+                    height: 30,
+                  )
+                : const Spacer(),
+            Badge(
+              isLabelVisible: settingController.api.isEmpty,
+              child: IconButton(
+                onPressed: () => settingController.openApiSetting(),
+                icon: const Icon(
+                  CupertinoIcons.gear,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

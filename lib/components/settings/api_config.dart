@@ -20,6 +20,11 @@ class _ApiConfigState extends State<ApiConfig> {
   @override
   void initState() {
     urlController.text = controller.api;
+    if (controller.api.isNotEmpty) {
+      setState(() {
+        error = '';
+      });
+    }
     super.initState();
   }
 
@@ -103,7 +108,9 @@ class _ApiConfigState extends State<ApiConfig> {
                         ? const SizedBox(
                             height: 10,
                             width: 10,
-                            child: CircularProgressIndicator(),
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                            ),
                           )
                         : const Icon(Icons.check),
                     label: const Text('Simpan'),

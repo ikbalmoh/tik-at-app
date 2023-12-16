@@ -255,8 +255,9 @@ class _CheckoutDialogState extends State<CheckoutDialog> {
                               height: 10,
                               width: 10,
                               child: Center(
-                                child:
-                                    CircularProgressIndicator(strokeWidth: 5),
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
                               ),
                             )
                           : const Icon(

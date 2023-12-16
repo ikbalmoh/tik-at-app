@@ -86,8 +86,11 @@ class AuthController extends GetxController {
         Get.offAllNamed(Routes.home);
       }
     } on DioException catch (e) {
-      String message = e.response?.data['message'] ?? e.message;
-      _authState.value = AuthFailure(message: message);
+      String? message = e.message;
+      if (e.response?.data['message']) {
+        message = e.response?.data['message'];
+      }
+      _authState.value = AuthFailure(message: message ?? '');
       box.remove('user');
       box.remove('token');
       if (Get.currentRoute != Routes.login) {

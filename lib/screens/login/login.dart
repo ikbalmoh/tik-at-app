@@ -8,25 +8,27 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('assets/images/bg.png'), fit: BoxFit.cover),
-            ),
-          ),
-          ResponsiveBreakpoints.of(context).isMobile
-              ? const Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(15),
-                      child: LoginForm(),
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.deepPurple,
+      body: ResponsiveBreakpoints.of(context).isMobile
+          ? const Padding(
+              padding: EdgeInsets.all(15),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [LoginForm()],
+              ),
+            )
+          : Stack(
+              children: [
+                Container(
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/bg.png'),
+                      fit: BoxFit.cover,
                     ),
-                  ],
-                )
-              : const Positioned(
+                  ),
+                ),
+                const Positioned(
                   right: 15,
                   top: 15,
                   bottom: 15,
@@ -35,8 +37,8 @@ class Login extends StatelessWidget {
                     child: LoginForm(),
                   ),
                 ),
-        ],
-      ),
+              ],
+            ),
     );
   }
 }

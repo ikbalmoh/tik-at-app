@@ -20,7 +20,7 @@ class Ticket {
         name = json['name']?.toString() ?? '',
         description = json['description']?.toString() ?? '',
         color = Color(json['color']),
-        price = json['price'] ?? 0;
+        price = double.tryParse(json['price'].toString()) ?? 0.0;
 
   Map<String, dynamic> toJson() =>
       {'id': id, 'name': name, 'description': description, 'price': price};
