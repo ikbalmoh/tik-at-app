@@ -8,7 +8,7 @@ class PrinterState extends Equatable {
   List<Object> get props => [];
 }
 
-class PrinterNotSelected extends PrinterState {}
+class PrinterNotConnected extends PrinterState {}
 
 class PrinterConnecting extends PrinterState {
   final BluetoothDevice device;

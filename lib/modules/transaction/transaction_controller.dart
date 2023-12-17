@@ -122,10 +122,13 @@ class TransactionController extends GetxController {
       resetTransaction(snackbar: false);
     } on DioException catch (e) {
       _loading.value = false;
-      String message = e.response?.data['message'] ?? e.message;
+      String? message = e.message;
+      if (e.response != null) {
+        message = e.response?.data['message'];
+      }
       Get.snackbar(
         'Transaksi Tiket Gagal',
-        message,
+        message ?? 'Terjadi kesalahan',
         backgroundColor: Colors.red.shade50,
       );
     } catch (e) {

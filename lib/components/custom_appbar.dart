@@ -32,70 +32,87 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: Colors.white,
-      title: const Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Image(
-            image: AssetImage('assets/images/ticket.png'),
-            height: 30,
+    return Obx(
+      () => AppBar(
+        backgroundColor: Colors.white,
+        title: const Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Image(
+              image: AssetImage('assets/images/ticket.png'),
+              height: 30,
+            ),
+            SizedBox(width: 10),
+            Text('eTiket Situ Bagendit'),
+          ],
+        ),
+        automaticallyImplyLeading: false,
+        actions: [
+          Badge(
+            offset: const Offset(-15, -15),
+            backgroundColor: Colors.red,
+            isLabelVisible:
+                setting.printer is! PrinterConnected || setting.api.isEmpty,
+            smallSize: 10,
+            child: PopupMenuButton<PopupMenus>(
+              onSelected: onSelectMenu,
+              itemBuilder: (context) => [
+                PopupMenuItem<PopupMenus>(
+                  value: PopupMenus.printer,
+                  child: Row(
+                    children: [
+                      Badge(
+                        backgroundColor: setting.printer is PrinterConnected
+                            ? Colors.green
+                            : Colors.red,
+                        smallSize: 10,
+                        child: const Icon(CupertinoIcons.printer),
+                      ),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      const Text('Pengaturan Printer'),
+                    ],
+                  ),
+                ),
+                PopupMenuItem<PopupMenus>(
+                  value: PopupMenus.server,
+                  child: Row(
+                    children: [
+                      Badge(
+                        smallSize: 10,
+                        backgroundColor:
+                            setting.api.isNotEmpty ? Colors.green : Colors.red,
+                        child: const Icon(CupertinoIcons.globe),
+                      ),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      const Text('Pengaturan Server'),
+                    ],
+                  ),
+                ),
+                const PopupMenuItem<PopupMenus>(
+                  value: PopupMenus.logout,
+                  child: Row(
+                    children: [
+                      Icon(CupertinoIcons.square_arrow_right),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      Text('Keluar'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-          SizedBox(width: 10),
-          Text('eTiket Situ Bagendit'),
+          const SizedBox(
+            width: 10,
+          ),
         ],
       ),
-      automaticallyImplyLeading: false,
-      actions: [
-        Badge(
-          smallSize: 10,
-          child: PopupMenuButton<PopupMenus>(
-            onSelected: onSelectMenu,
-            itemBuilder: (context) => [
-              const PopupMenuItem<PopupMenus>(
-                value: PopupMenus.printer,
-                child: Row(
-                  children: [
-                    Icon(CupertinoIcons.printer),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Text('Pengaturan Printer'),
-                  ],
-                ),
-              ),
-              const PopupMenuItem<PopupMenus>(
-                value: PopupMenus.server,
-                child: Row(
-                  children: [
-                    Icon(CupertinoIcons.globe),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Text('Pengaturan Server'),
-                  ],
-                ),
-              ),
-              const PopupMenuItem<PopupMenus>(
-                value: PopupMenus.logout,
-                child: Row(
-                  children: [
-                    Icon(CupertinoIcons.square_arrow_right),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    Text('Keluar'),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-      ],
     );
   }
 }

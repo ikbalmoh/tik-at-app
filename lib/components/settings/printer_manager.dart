@@ -14,6 +14,16 @@ class PrinterManager extends StatefulWidget {
 class _PrinterManagerState extends State<PrinterManager> {
   SettingController controller = Get.find();
 
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (controller.devices.isEmpty) {
+        controller.scanPrinters();
+      }
+    });
+    super.initState();
+  }
+
   Widget? deviceIndicator(PrinterState state, BluetoothDevice device) {
     if (state is PrinterConnecting && state.device.address == device.address) {
       return const SizedBox(
@@ -37,107 +47,104 @@ class _PrinterManagerState extends State<PrinterManager> {
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
 
-    return Container(
-      width: 400,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.only(bottom: 10),
-            margin: const EdgeInsets.only(bottom: 10),
-            decoration: const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  width: 0.5,
-                  color: Colors.black12,
+    return Obx(
+      () => Container(
+        width: 400,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.only(bottom: 5),
+              margin: const EdgeInsets.only(bottom: 10),
+              decoration: const BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    width: 0.5,
+                    color: Colors.black12,
+                  ),
                 ),
               ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'Printer',
-                  style: textTheme.headlineSmall,
-                ),
-                controller.loading
-                    ? const SizedBox(
-                        width: 10,
-                        height: 10,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                        ),
-                      )
-                    : IconButton(
-                        onPressed: () => controller.scanPrinters(),
-                        icon: const Icon(
-                          CupertinoIcons.search,
-                          size: 18,
-                        ),
-                      )
-              ],
-            ),
-          ),
-          StreamBuilder<List<BluetoothDevice>>(
-            stream: controller.bluetoothPrint.scanResults,
-            initialData: const [],
-            builder: (c, snapshot) => snapshot.data!.isNotEmpty
-                ? Column(
-                    children: snapshot.data!
-                        .map(
-                          (d) => ListTile(
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 0,
-                              vertical: 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Printer',
+                    style: textTheme.headlineSmall,
+                  ),
+                  controller.loading
+                      ? const Padding(
+                          padding: EdgeInsets.all(12.0),
+                          child: SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.grey,
                             ),
-                            title: Text(d.name ?? ''),
-                            subtitle: Text(d.address ?? '-'),
-                            onTap: () => controller.selectPrinter(d),
-                            trailing: deviceIndicator(controller.printer, d),
                           ),
                         )
+                      : IconButton(
+                          padding: const EdgeInsets.all(0),
+                          onPressed: () => controller.scanPrinters(),
+                          icon: const Icon(
+                            CupertinoIcons.search,
+                            size: 18,
+                          ),
+                        )
+                ],
+              ),
+            ),
+            controller.devices.isNotEmpty
+                ? Column(
+                    children: controller.devices
+                        .map((d) => ListTile(
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 0,
+                                vertical: 0,
+                              ),
+                              title: Text(d.name ?? ''),
+                              subtitle: Text(d.address ?? '-'),
+                              onTap: () => controller.selectPrinter(d),
+                              trailing: deviceIndicator(controller.printer, d),
+                            ))
                         .toList(),
                   )
                 : Padding(
                     padding: const EdgeInsets.symmetric(vertical: 40),
                     child: Center(
-                      child: controller.loading
-                          ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : const Text(
-                              'Tidak Ada Perangkat',
-                              style: TextStyle(
-                                color: Colors.grey,
-                              ),
-                            ),
+                      child: Text(
+                        controller.loading
+                            ? 'Mencari Perangkat'
+                            : 'Tidak Ada Perangkat',
+                        style: const TextStyle(
+                          color: Colors.grey,
+                        ),
+                      ),
                     ),
                   ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              TextButton(
-                onPressed: () => Get.back(),
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.grey,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                TextButton(
+                  onPressed: () => Get.back(),
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.grey,
+                  ),
+                  child: const Text('Tutup'),
                 ),
-                child: const Text('Tutup'),
-              ),
-            ],
-          )
-        ],
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

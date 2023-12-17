@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -86,13 +87,18 @@ class AuthController extends GetxController {
         Get.offAllNamed(Routes.home);
       }
     } on DioException catch (e) {
-      String? message = e.message;
-      if (e.response?.data['message']) {
-        message = e.response?.data['message'];
-      }
-      _authState.value = AuthFailure(message: message ?? '');
+      String message = e.response?.data['message'] ?? e.message;
+      _authState.value = AuthFailure(message: message);
       box.remove('user');
       box.remove('token');
+      Get.showSnackbar(
+        GetSnackBar(
+          title: message,
+          message: 'Silahkan Login Kembali',
+          duration: const Duration(seconds: 5),
+          backgroundColor: Colors.red,
+        ),
+      );
       if (Get.currentRoute != Routes.login) {
         Get.offAllNamed(Routes.login);
       }

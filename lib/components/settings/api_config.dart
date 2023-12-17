@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tik_at_app/modules/setting/setting.dart';
+import 'package:validators/validators.dart';
 
 class ApiConfig extends StatefulWidget {
   const ApiConfig({super.key});
@@ -26,6 +27,18 @@ class _ApiConfigState extends State<ApiConfig> {
       });
     }
     super.initState();
+  }
+
+  void onChangeUrl(String value) {
+    String msg = '';
+    if (value.isEmpty) {
+      msg = 'Masukkan alamat server';
+    } else if (!isURL(value)) {
+      msg = 'Alamat tidak valid';
+    }
+    setState(() {
+      error = msg;
+    });
   }
 
   void submit() async {
@@ -76,9 +89,7 @@ class _ApiConfigState extends State<ApiConfig> {
                   hintText: 'http://192.168.1.1',
                 ),
                 autofocus: true,
-                onChanged: (value) => setState(() {
-                  error = value.isEmpty ? 'Masukkan alamat server' : '';
-                }),
+                onChanged: onChangeUrl,
                 validator: (_) {
                   if (error.isNotEmpty) {
                     return error;
