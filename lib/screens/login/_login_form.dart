@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tik_at_app/modules/auth/auth.dart';
-import 'package:tik_at_app/modules/setting/setting_controller.dart';
+import 'package:tik_at_app/modules/setting/setting.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+
+enum PopupMenus { server, printer }
 
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
@@ -48,6 +50,18 @@ class _LoginFormState extends State<LoginForm> {
       authController.login(username, password);
     } catch (e) {
       _passwordController.clear();
+    }
+  }
+
+  void onSelectMenu(PopupMenus menu) {
+    switch (menu) {
+      case PopupMenus.printer:
+        settingController.openPrinterSetting();
+        break;
+      case PopupMenus.server:
+        settingController.openApiSetting();
+        break;
+      default:
     }
   }
 
@@ -146,10 +160,52 @@ class _LoginFormState extends State<LoginForm> {
                   )
                 : const Spacer(),
             Badge(
-              isLabelVisible: settingController.api.isEmpty,
-              child: IconButton(
-                onPressed: () => settingController.openApiSetting(),
-                icon: const Icon(
+              smallSize: 10,
+              isLabelVisible: settingController.api.isEmpty ||
+                  settingController.printer is! PrinterConnected,
+              child: PopupMenuButton(
+                tooltip: 'Pengaturan',
+                onSelected: onSelectMenu,
+                itemBuilder: (context) => [
+                  PopupMenuItem<PopupMenus>(
+                    value: PopupMenus.printer,
+                    child: Row(
+                      children: [
+                        Badge(
+                          backgroundColor:
+                              settingController.printer is PrinterConnected
+                                  ? Colors.green
+                                  : Colors.red,
+                          smallSize: 10,
+                          child: const Icon(CupertinoIcons.printer),
+                        ),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        const Text('Pengaturan Printer'),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem<PopupMenus>(
+                    value: PopupMenus.server,
+                    child: Row(
+                      children: [
+                        Badge(
+                          smallSize: 10,
+                          backgroundColor: settingController.api.isNotEmpty
+                              ? Colors.green
+                              : Colors.red,
+                          child: const Icon(CupertinoIcons.globe),
+                        ),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        const Text('Pengaturan Server'),
+                      ],
+                    ),
+                  )
+                ],
+                child: const Icon(
                   CupertinoIcons.gear,
                 ),
               ),

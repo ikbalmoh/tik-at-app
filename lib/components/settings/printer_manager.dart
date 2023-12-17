@@ -1,8 +1,8 @@
-import 'package:bluetooth_print/bluetooth_print_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tik_at_app/modules/setting/setting.dart';
+import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 
 class PrinterManager extends StatefulWidget {
   const PrinterManager({super.key});
@@ -123,7 +123,7 @@ class _PrinterManagerState extends State<PrinterManager> {
                       child: Text(
                         controller.loading
                             ? 'Mencari Perangkat'
-                            : 'Tidak Ada Perangkat',
+                            : 'Tidak Ada Perangkat Terdeteksi',
                         style: const TextStyle(
                           color: Colors.grey,
                         ),

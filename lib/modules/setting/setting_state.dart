@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:bluetooth_print/bluetooth_print_model.dart';
+import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 
 class PrinterState extends Equatable {
   const PrinterState();
