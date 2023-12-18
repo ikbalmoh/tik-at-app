@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -113,6 +113,13 @@ class AuthController extends GetxController {
           backgroundColor: Colors.red,
         ),
       );
+      if (Get.currentRoute != Routes.login) {
+        Get.offAllNamed(Routes.login);
+      }
+    } on PlatformException {
+      _authState.value = AuthInitial();
+      box.remove('user');
+      box.remove('token');
       if (Get.currentRoute != Routes.login) {
         Get.offAllNamed(Routes.login);
       }

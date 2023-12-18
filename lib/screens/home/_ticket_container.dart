@@ -65,11 +65,14 @@ class _TicketContainerState extends State<TicketContainer> {
                 return TicketItem(
                   ticket: ticket.value,
                   onPress: () => selectTicket(ticket.value),
-                  qtyCart: transactionController.tickets
-                          .firstWhereOrNull(
-                              (t) => t.ticketTypeId == ticket.value.id)
-                          ?.qty ??
-                      0,
+                  qtyCart: transactionController.state is TransactionInProgress
+                      ? (transactionController.state as TransactionInProgress)
+                              .tickets
+                              .firstWhereOrNull(
+                                  (t) => t.ticketTypeId == ticket.value.id)
+                              ?.qty ??
+                          0
+                      : 0,
                 );
               }).toList(),
             ))

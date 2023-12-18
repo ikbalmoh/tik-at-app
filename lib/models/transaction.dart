@@ -12,7 +12,7 @@ class TransactionItem {
     required this.name,
     required this.price,
     required this.qty,
-    required this.discount,
+    this.discount = 0,
     required this.subtotal,
     required this.total,
   });

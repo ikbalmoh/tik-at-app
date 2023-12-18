@@ -21,6 +21,8 @@ class _ApiConfigState extends State<ApiConfig> {
   @override
   void initState() {
     urlController.text = controller.api;
+    urlController.selection =
+        TextSelection(baseOffset: 0, extentOffset: controller.api.length);
     if (controller.api.isNotEmpty) {
       setState(() {
         error = '';

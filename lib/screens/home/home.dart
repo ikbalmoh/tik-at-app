@@ -31,75 +31,86 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     bool isMobile = ResponsiveBreakpoints.of(context).isMobile;
     return Obx(
-      () => Scaffold(
-        backgroundColor: Colors.blueGrey.shade50,
-        appBar: CustomAppBar(),
-        body: Container(
-          height: double.infinity,
-          width: double.infinity,
-          margin: const EdgeInsets.all(15),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(15)),
+      () {
+        return Scaffold(
+          backgroundColor: Colors.blueGrey.shade50,
+          appBar: CustomAppBar(),
+          body: Container(
+            height: double.infinity,
+            width: double.infinity,
+            margin: const EdgeInsets.all(15),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(15)),
+            ),
+            child: isMobile
+                ? const TicketContainer()
+                : Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border(
+                              right: BorderSide(
+                                  color: Colors.blueGrey.shade50, width: 0.5),
+                            ),
+                          ),
+                          child: const TicketContainer(),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 350,
+                        child: Cart(),
+                      )
+                    ],
+                  ),
           ),
-          child: isMobile
-              ? const TicketContainer()
-              : Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border(
-                            right: BorderSide(
-                                color: Colors.blueGrey.shade50, width: 0.5),
+          floatingActionButton: (transactionController.state
+                      is TransactionInProgress &&
+                  (transactionController.state as TransactionInProgress)
+                      .tickets
+                      .isNotEmpty &&
+                  isMobile)
+              ? Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: FloatingActionButton(
+                    tooltip: 'Kerangjang',
+                    backgroundColor: Colors.blue.shade100,
+                    onPressed: () {
+                      showModalBottomSheet(
+                        showDragHandle: true,
+                        enableDrag: true,
+                        context: context,
+                        builder: (context) => const Padding(
+                          padding:
+                              EdgeInsets.only(left: 8, right: 8, bottom: 10),
+                          child: Cart(),
+                        ),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(30),
                           ),
                         ),
-                        child: const TicketContainer(),
+                      );
+                    },
+                    child: Badge(
+                      label: Text(
+                        transactionController.state is TransactionInProgress
+                            ? (transactionController.state
+                                    as TransactionInProgress)
+                                .tickets
+                                .fold(0, (sum, t) => sum + t.qty)
+                                .toString()
+                            : '0',
                       ),
+                      child: const Icon(CupertinoIcons.cart),
                     ),
-                    const SizedBox(
-                      width: 350,
-                      child: Cart(),
-                    )
-                  ],
-                ),
-        ),
-        floatingActionButton: (transactionController.tickets.isNotEmpty &&
-                isMobile)
-            ? Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: FloatingActionButton(
-                  tooltip: 'Kerangjang',
-                  backgroundColor: Colors.blue.shade100,
-                  onPressed: () {
-                    showModalBottomSheet(
-                      showDragHandle: true,
-                      enableDrag: true,
-                      context: context,
-                      builder: (context) => const Padding(
-                        padding: EdgeInsets.only(left: 8, right: 8, bottom: 10),
-                        child: Cart(),
-                      ),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(30),
-                        ),
-                      ),
-                    );
-                  },
-                  child: Badge(
-                    label: Text(
-                      transactionController.tickets
-                          .fold(0, (sum, t) => sum + t.qty)
-                          .toString(),
-                    ),
-                    child: const Icon(CupertinoIcons.cart),
                   ),
-                ),
-              )
-            : Container(),
-      ),
+                )
+              : Container(),
+        );
+      },
     );
   }
 }

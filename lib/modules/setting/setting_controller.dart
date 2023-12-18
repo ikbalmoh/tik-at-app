@@ -7,11 +7,8 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:tik_at_app/components/settings/api_config.dart';
 import 'package:tik_at_app/components/settings/printer_manager.dart';
-import 'package:tik_at_app/models/ticket.dart';
 import 'package:tik_at_app/modules/setting/setting.dart';
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
-import 'package:intl/intl.dart';
-import 'package:tik_at_app/utils/utils.dart';
 
 class SettingController extends GetxController {
   final GetStorage box = GetStorage();
@@ -41,7 +38,7 @@ class SettingController extends GetxController {
 
   void initSetting() {
     if (box.hasData('api')) {
-      _api.value = box.read('api');
+      setApiUrl(box.read('api'));
     }
     initPrinter();
   }
@@ -216,14 +213,14 @@ class SettingController extends GetxController {
         print('FAILED SELECT PRINTER : $e');
       }
       Get.showSnackbar(
-        GetSnackBar(
-          title: 'Periksa Koneksi Printer',
-          message: e.message,
-          icon: const Icon(
+        const GetSnackBar(
+          title: 'Tidak Dapat Terhubung',
+          message: 'Periksa koneksi perangkat',
+          icon: Icon(
             CupertinoIcons.printer,
             color: Colors.white,
           ),
-          duration: const Duration(seconds: 3),
+          duration: Duration(seconds: 3),
           backgroundColor: Colors.red,
           snackPosition: SnackPosition.TOP,
         ),
@@ -248,49 +245,6 @@ class SettingController extends GetxController {
     bluetooth.printCustom('-----------------------------', 1, 1);
     bluetooth.printNewLine();
     bluetooth.printQRcode("Situ Bagendit", 250, 250, 1);
-    bluetooth.paperCut();
-  }
-
-  Future printTicket(Ticket ticket) async {
-    if (kDebugMode) {
-      print('PRINT TICKET: ${ticket.toString()}');
-    }
-    bool? isConnected = await bluetooth.isConnected ?? false;
-    if (!isConnected) {
-      throw Future.error('printer tidak terkoneksi');
-    }
-    String separator = '--------------------------------';
-
-    ByteData bytesAsset = await rootBundle.load("assets/images/garut-bw.jpg");
-    Uint8List imageBytesFromAsset = bytesAsset.buffer
-        .asUint8List(bytesAsset.offsetInBytes, bytesAsset.lengthInBytes);
-
-    bluetooth.printImageBytes(imageBytesFromAsset);
-    bluetooth.printNewLine();
-    bluetooth.printCustom('TIKET MASUK', 3, 1);
-    bluetooth.printCustom('Situ Bagendit', 2, 1);
-    bluetooth.printNewLine();
-    bluetooth.printNewLine();
-    bluetooth.printCustom(separator, 1, 1);
-    bluetooth.printLeftRight(
-        'Waktu', DateFormat('dd/MM/yy hh:mm').format(ticket.purchaseDate), 1);
-    bluetooth.printLeftRight('Operator', ticket.operatorName, 1);
-    bluetooth.printCustom(separator, 1, 1);
-    bluetooth.printLeftRight('Tiket', ticket.ticketTypeName, 1);
-    bluetooth.printLeftRight(
-        'Harga', CurrencyFormat.idr(ticket.ticketPrice, 0), 1);
-    bluetooth.printLeftRight('Berlaku untuk', '${ticket.entranceMax} orang', 1);
-    bluetooth.printCustom(separator, 1, 1);
-    bluetooth.printNewLine();
-    bluetooth.printCustom('Scan QR Code ', 1, 1);
-    bluetooth.printQRcode(ticket.id, 250, 250, 1);
-    bluetooth.printNewLine();
-    bluetooth.printNewLine();
-    bluetooth.printCustom('Dinas Parisiwisata dan\nKebudayaan Garut', 1, 1);
-    bluetooth.printNewLine();
-    bluetooth.printCustom('-', 1, 1);
-    bluetooth.printNewLine();
-    bluetooth.printCustom('Terimakasih atas Kunjungan Anda', 1, 1);
     bluetooth.paperCut();
   }
 }

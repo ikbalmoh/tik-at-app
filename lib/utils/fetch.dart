@@ -55,10 +55,16 @@ class CustomInterceptors extends Interceptor {
 
   @override
   Future onError(DioException err, ErrorInterceptorHandler handler) async {
-    err.response?.data ??= {'message': 'Tidak dapat terhubung ke server'};
+    dynamic originalData = err.response?.data;
+    bool json = err.response?.data != null
+        ? isJSON(jsonEncode(err.response?.data))
+        : false;
+    if (!json) {
+      err.response?.data = {'message': 'Tidak dapat terhubung ke server'};
+    }
     if (kDebugMode) {
       print(
-          'ERROR[${err.response?.statusCode}] \n => PATH: ${err.requestOptions.path}\n => DATA: ${err.response?.data}');
+          'ERROR[${err.response?.statusCode}] \n => JSON: $json\n=> PATH: ${err.requestOptions.path}\n => DATA: $originalData');
     }
     super.onError(err, handler);
   }

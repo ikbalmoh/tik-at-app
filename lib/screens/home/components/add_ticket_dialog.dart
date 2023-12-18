@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tik_at_app/models/ticket_type.dart';
 import 'package:tik_at_app/models/transaction.dart';
-import 'package:tik_at_app/modules/transaction/transaction_controller.dart';
+import 'package:tik_at_app/modules/transaction/transaction.dart';
 import 'package:tik_at_app/utils/utils.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -19,16 +19,18 @@ class _AddTicketDialogState extends State<AddTicketDialog> {
   TransactionController controller = Get.find();
 
   TextEditingController qty = TextEditingController();
-  FocusNode qtyFocusNode = FocusNode();
 
   TransactionItem? item;
 
   @override
   void initState() {
-    item = controller.tickets
+    item = (controller.state as TransactionInProgress)
+        .tickets
         .firstWhereOrNull((t) => t.ticketTypeId == widget.ticket.id);
-    qty.text = (item == null ? '1' : item?.qty.toString())!;
-    qtyFocusNode.requestFocus();
+    String initialQty = (item == null ? '1' : item?.qty.toString())!;
+    qty.text = initialQty;
+    qty.selection =
+        TextSelection(baseOffset: 0, extentOffset: initialQty.length);
 
     super.initState();
   }
@@ -131,7 +133,7 @@ class _AddTicketDialogState extends State<AddTicketDialog> {
                     isDense: true,
                     hintStyle: TextStyle(color: Colors.grey),
                   ),
-                  focusNode: qtyFocusNode,
+                  autofocus: true,
                 ),
               ),
               textTheme,
