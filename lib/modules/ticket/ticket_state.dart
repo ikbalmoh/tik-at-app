@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:tik_at_app/models/ticket.dart';
+import 'package:tik_at_app/models/ticket_type.dart';
 
 class TicketState extends Equatable {
   const TicketState();
@@ -13,7 +13,7 @@ class TicketInitial extends TicketState {}
 class TicketLoading extends TicketState {}
 
 class TicketLoaded extends TicketState {
-  final List<Ticket> tickets;
+  final List<TicketType> tickets;
 
   const TicketLoaded({required this.tickets});
 

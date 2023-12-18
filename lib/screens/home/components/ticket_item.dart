@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tik_at_app/models/ticket.dart';
+import 'package:tik_at_app/models/ticket_type.dart';
 import 'package:tik_at_app/utils/utils.dart';
 
 class TicketItem extends StatelessWidget {
-  final Ticket ticket;
+  final TicketType ticket;
   final Function onPress;
   final int qtyCart;
 

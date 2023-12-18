@@ -151,8 +151,16 @@ class _LoginFormState extends State<LoginForm> {
                       settingController.api.isEmpty
                   ? null
                   : () => _onLogin(context),
-              child: Text(
-                  authController.state is AuthLoading ? 'LOGIN ...' : 'LOGIN'),
+              child: authController.state is AuthLoading
+                  ? const SizedBox(
+                      width: 12,
+                      height: 12,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.grey,
+                      ),
+                    )
+                  : const Text('LOGIN'),
             ),
             isMobile
                 ? const SizedBox(
@@ -205,10 +213,21 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                   )
                 ],
-                child: const Icon(
+                icon: const Icon(
                   CupertinoIcons.gear,
                 ),
               ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            const Text(
+              'Dinas Parisiwisata dan Kebudayaan Garut',
+              textAlign: TextAlign.center,
+            ),
+            const Text(
+              '© 2023',
+              textAlign: TextAlign.center,
             ),
           ],
         ),

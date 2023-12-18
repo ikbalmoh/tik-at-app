@@ -46,6 +46,10 @@ class AuthController extends GetxController {
     try {
       final data = await _service.login(username, password);
 
+      if (kDebugMode) {
+        print("LOGIN DATA: $data");
+      }
+
       if (data is Map && data.containsKey('token')) {
         box.write('token', data['token']);
 
@@ -55,11 +59,11 @@ class AuthController extends GetxController {
         _authState.value = Authenticated(user: user, token: data['token']);
         Get.offAllNamed(Routes.home);
       } else {
-        _authState.value = UnAuthenticated();
+        throw Error();
       }
     } on DioException catch (e) {
       if (kDebugMode) {
-        print('LOGN ERROR: ${e.message}');
+        print('LOGIN ERROR: ${e.message}');
       }
       String message = e.response?.data['message'] ?? e.message;
       Get.snackbar(
@@ -71,6 +75,16 @@ class AuthController extends GetxController {
       _authState.value = AuthFailure(message: message);
       box.remove('user');
       box.remove('token');
+    } catch (e) {
+      String message = 'Tidak dapat terhubung ke Server';
+      _authState.value = AuthFailure(message: message);
+      Get.snackbar(
+        'Login Gagal',
+        message,
+        backgroundColor: Colors.red.shade50,
+        colorText: Colors.red.shade800,
+        duration: const Duration(seconds: 5),
+      );
     }
   }
 

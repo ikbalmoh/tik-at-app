@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:tik_at_app/models/ticket.dart';
+import 'package:tik_at_app/models/ticket_type.dart';
 import 'package:tik_at_app/modules/ticket/ticket.dart';
 import 'package:tik_at_app/modules/transaction/transaction.dart';
 import 'package:tik_at_app/screens/home/components/add_ticket_dialog.dart';
@@ -18,7 +18,7 @@ class _TicketContainerState extends State<TicketContainer> {
   TicketController controller = Get.find();
   TransactionController transactionController = Get.find();
 
-  void selectTicket(Ticket ticket) {
+  void selectTicket(TicketType ticket) {
     Get.dialog(
       AddTicketDialog(
         ticket: ticket,

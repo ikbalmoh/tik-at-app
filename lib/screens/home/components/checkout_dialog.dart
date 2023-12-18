@@ -29,7 +29,8 @@ class _CheckoutDialogState extends State<CheckoutDialog> {
   void initState() {
     payNode.requestFocus();
     payController.addListener(() {
-      final pay = double.parse(payController.text);
+      final pay =
+          payController.text.isNotEmpty ? double.parse(payController.text) : 0;
       paymentPassed = pay >= controller.grandTotal.toDouble();
       setState(() {
         paymentPassed = paymentPassed;

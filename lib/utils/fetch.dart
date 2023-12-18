@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_storage/get_storage.dart';
@@ -36,6 +38,9 @@ class CustomInterceptors extends Interceptor {
       options.headers['Authorization'] = 'Bearer $token';
     }
 
+    // options.followRedirects = false;
+    // options.validateStatus = (status) => status != null && status < 500;
+
     return super.onRequest(options, handler);
   }
 
@@ -50,11 +55,7 @@ class CustomInterceptors extends Interceptor {
 
   @override
   Future onError(DioException err, ErrorInterceptorHandler handler) async {
-    if (err.response == null || err.response?.data != null) {
-      if (!isJSON(err.response?.data)) {
-        err.response?.data = {'message': 'Tidak dapat terhubung ke server'};
-      }
-    }
+    err.response?.data ??= {'message': 'Tidak dapat terhubung ke server'};
     if (kDebugMode) {
       print(
           'ERROR[${err.response?.statusCode}] \n => PATH: ${err.requestOptions.path}\n => DATA: ${err.response?.data}');

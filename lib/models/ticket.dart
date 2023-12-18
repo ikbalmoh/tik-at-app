@@ -1,32 +1,36 @@
-import 'package:flutter/material.dart';
-
 class Ticket {
-  final int id;
-  final String name;
-  final String description;
-  final double price;
-  final Color? color;
+  final String id;
+  final int entranceMax;
+  final int entranceCount;
+  final String operatorName;
+  final String ticketTypeName;
+  final double ticketPrice;
+  final bool isGroup;
+  final DateTime purchaseDate;
 
   Ticket({
     required this.id,
-    required this.name,
-    required this.description,
-    required this.price,
-    this.color,
+    required this.entranceMax,
+    required this.entranceCount,
+    required this.operatorName,
+    required this.ticketTypeName,
+    required this.ticketPrice,
+    required this.isGroup,
+    required this.purchaseDate,
   });
 
   Ticket.fromJson(Map<dynamic, dynamic> json)
-      : id = int.tryParse(json['id']?.toString() ?? '') ?? 0,
-        name = json['name']?.toString() ?? '',
-        description = json['description']?.toString() ?? '',
-        color = Color(json['color']),
-        price = double.tryParse(json['price'].toString()) ?? 0.0;
-
-  Map<String, dynamic> toJson() =>
-      {'id': id, 'name': name, 'description': description, 'price': price};
+      : id = json['id'],
+        entranceMax = json['entrance_max'] as int,
+        entranceCount = json['entrance_count'] as int,
+        operatorName = json['operator_name'],
+        ticketTypeName = json['ticket_type_name'],
+        ticketPrice = double.tryParse(json['ticket_price'].toString()) ?? 0,
+        isGroup = json['is_group'] as bool,
+        purchaseDate = DateTime.parse(json['purchase_date']);
 
   @override
   String toString() {
-    return '{"id": $id, "name": $name, "description": $description, "price": $price}';
+    return '{"id": $id, "ticket_type_name": $ticketTypeName, "operator_name": $operatorName, "entrance_max": $entranceMax, "ticket_price": $ticketPrice, "purchase_date": $purchaseDate}';
   }
 }

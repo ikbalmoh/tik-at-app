@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tik_at_app/modules/setting/setting.dart';
 import 'package:tik_at_app/modules/transaction/transaction.dart';
 import 'package:tik_at_app/screens/home/components/cart_item.dart';
 import 'package:tik_at_app/utils/utils.dart';
@@ -15,12 +16,31 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
   TransactionController controller = Get.find();
+  SettingController settingController = Get.find();
 
   void openPayment() {
-    Get.dialog(
-      const CheckoutDialog(),
-      barrierDismissible: false,
-    );
+    if (settingController.printer is PrinterConnected) {
+      Get.dialog(
+        const CheckoutDialog(),
+        barrierDismissible: false,
+      );
+    } else {
+      Get.dialog(
+        AlertDialog(
+          title: const Text('Printer Belum Terhubung'),
+          content: const Text('Hubungkan printer untuk melakukan transaksi'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.back(closeOverlays: true);
+                settingController.openPrinterSetting();
+              },
+              child: const Text('OK'),
+            )
+          ],
+        ),
+      );
+    }
   }
 
   Widget summary(String label, String value, TextTheme textTheme) {

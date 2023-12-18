@@ -3,13 +3,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tik_at_app/models/ticket.dart';
+import 'package:tik_at_app/models/ticket_type.dart';
 import 'package:tik_at_app/models/transaction.dart';
+import 'package:tik_at_app/modules/setting/setting.dart';
 import 'package:tik_at_app/modules/transaction/transaction.dart';
 
 class TransactionController extends GetxController {
   final TransactionService _service;
+  final SettingController _settingController;
 
-  TransactionController(this._service);
+  TransactionController(this._service, this._settingController);
 
   final tickets = <TransactionItem>[].obs;
   final subtotal = (0.0).obs;
@@ -19,7 +22,7 @@ class TransactionController extends GetxController {
   final _loading = false.obs;
   bool get loading => _loading.value;
 
-  void selectTicket(Ticket ticket, int qty) {
+  void selectTicket(TicketType ticket, int qty) {
     if (qty < 1) {
       return removeTicket(ticket.id, false);
     }
@@ -114,12 +117,16 @@ class TransactionController extends GetxController {
       final data = await _service.postTransaction(transaction.toJson());
       _loading.value = false;
       Get.back(closeOverlays: true);
-      Get.snackbar(
-        data["message"],
-        'Mencetak ${data["tickets"].length} tiket...',
+      Get.showSnackbar(GetSnackBar(
+        title: 'Transaksi Berhasil',
+        message: 'Mencetak ${data["tickets"].length} tiket...',
         duration: const Duration(seconds: 5),
-      );
+      ));
       resetTransaction(snackbar: false);
+      for (int i = 0; i < data['tickets'].length; i++) {
+        Ticket ticket = Ticket.fromJson(data['tickets'][i]);
+        await _settingController.printTicket(ticket);
+      }
     } on DioException catch (e) {
       _loading.value = false;
       String? message = e.message;

@@ -46,7 +46,15 @@ class _ApiConfigState extends State<ApiConfig> {
       if (_formKey.currentState!.validate()) {
         await controller.setApiUrl(urlController.text);
         Get.back(closeOverlays: true);
-        Get.snackbar('Terhubung ke Server', 'Konfigurasi Disimpan');
+        Get.showSnackbar(
+          const GetSnackBar(
+            title: 'Terhubung ke Server',
+            message: 'Alamat server disimpan',
+            duration: Duration(seconds: 3),
+            backgroundColor: Colors.green,
+            snackPosition: SnackPosition.TOP,
+          ),
+        );
       }
     } catch (e) {
       setState(() {

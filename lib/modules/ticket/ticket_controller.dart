@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:tik_at_app/models/ticket.dart';
+import 'package:tik_at_app/models/ticket_type.dart';
 import 'package:tik_at_app/modules/ticket/ticket.dart';
 import 'package:tik_at_app/data/colors.dart';
 
@@ -23,7 +23,7 @@ class TicketController extends GetxController {
   }
 
   Future loadTickets() async {
-    List<Ticket> tickets = [];
+    List<TicketType> tickets = [];
     try {
       _state.value = TicketLoading();
       final List<dynamic> data = await _service.loadTickets();
@@ -33,7 +33,7 @@ class TicketController extends GetxController {
         if (kDebugMode) {
           print(json);
         }
-        tickets.add(Ticket.fromJson(json));
+        tickets.add(TicketType.fromJson(json));
       }
       _state.value = TicketLoaded(tickets: tickets);
     } on DioException catch (e) {
@@ -43,7 +43,7 @@ class TicketController extends GetxController {
         final List<dynamic> savedTickets = box.read('tickets');
         for (final json in savedTickets) {
           json['color'] = colors[json['id']] ?? 0xffbee3db;
-          tickets.add(Ticket.fromJson(json));
+          tickets.add(TicketType.fromJson(json));
           _state.value = TicketLoaded(tickets: tickets);
         }
       }

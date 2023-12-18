@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tik_at_app/models/ticket.dart';
+import 'package:tik_at_app/models/ticket_type.dart';
 import 'package:tik_at_app/models/transaction.dart';
 import 'package:tik_at_app/modules/transaction/transaction_controller.dart';
 import 'package:tik_at_app/utils/utils.dart';
@@ -9,7 +9,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 class AddTicketDialog extends StatefulWidget {
   const AddTicketDialog({super.key, required this.ticket});
 
-  final Ticket ticket;
+  final TicketType ticket;
 
   @override
   State<AddTicketDialog> createState() => _AddTicketDialogState();
