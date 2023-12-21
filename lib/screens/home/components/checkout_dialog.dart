@@ -288,7 +288,7 @@ class _CheckoutDialogState extends State<CheckoutDialog> {
                                       ? submitTransaction()
                                       : settingController.openPrinterSetting()
                               : null,
-                          label: const Text('PEMBAYARAN DITERIMA'),
+                          label: const Text('DIBAYAR'),
                         ),
                       ],
                     ),
