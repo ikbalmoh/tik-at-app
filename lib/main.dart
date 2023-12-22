@@ -7,6 +7,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:tik_at_app/modules/auth/auth.dart';
 import 'package:get/get.dart';
 import 'package:tik_at_app/modules/setting/setting.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 Future initServices() async {
   if (kDebugMode) {
@@ -29,6 +30,9 @@ Future initServices() async {
   };
 
   await GetStorage.init();
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+  String appVersion = packageInfo.version;
 
   final deviceInfoPlugin = DeviceInfoPlugin();
 
@@ -54,6 +58,7 @@ Future initServices() async {
 
   GetStorage box = GetStorage();
 
+  box.write('version', appVersion);
   box.write('device', deviceName);
 
   Get.put(SettingController(SettingService()));

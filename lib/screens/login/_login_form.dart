@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:tik_at_app/modules/auth/auth.dart';
 import 'package:tik_at_app/modules/setting/setting.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:get_storage/get_storage.dart';
 
 enum PopupMenus { server, printer }
 
@@ -17,6 +18,8 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   AuthController authController = Get.find();
   SettingController settingController = Get.find();
+
+  GetStorage box = GetStorage();
 
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -228,6 +231,14 @@ class _LoginFormState extends State<LoginForm> {
             const Text(
               '© 2023',
               textAlign: TextAlign.center,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Text(
+              "v${box.read('version') ?? '0'}",
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.grey),
             ),
           ],
         ),

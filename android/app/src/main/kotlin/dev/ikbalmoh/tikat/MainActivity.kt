@@ -1,4 +1,4 @@
-package com.example.tik_at_app
+package dev.ikbalmoh.tikat
 
 import io.flutter.embedding.android.FlutterActivity
 
