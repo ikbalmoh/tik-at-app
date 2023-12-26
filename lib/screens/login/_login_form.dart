@@ -86,161 +86,161 @@ class _LoginFormState extends State<LoginForm> {
           ],
         ),
         padding: const EdgeInsets.all(30.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            isMobile
-                ? const SizedBox(
-                    height: 20,
-                  )
-                : const Spacer(),
-            Image.asset(
-              'assets/images/ticket.png',
-              height: 50,
-            ),
-            const SizedBox(height: 5),
-            Text(
-              'eTiket Situ Bagendit',
-              style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 50),
-            Text(
-              'Selamat Datang',
-              style: textTheme.headlineSmall,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 15),
-            Text(
-              'Silahkan gunakan akun operator untuk login',
-              style:
-                  textTheme.bodyMedium?.copyWith(color: Colors.grey.shade700),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 15),
-            TextFormField(
-              decoration: const InputDecoration(
-                labelText: 'username',
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(
+                height: 20,
               ),
-              controller: _usernameController,
-              readOnly: settingController.api.isEmpty,
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              decoration: InputDecoration(
-                labelText: 'password',
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      passwordHidden = !passwordHidden;
-                    });
-                  },
-                  icon: Icon(passwordHidden
-                      ? CupertinoIcons.eye_slash
-                      : CupertinoIcons.eye),
+              Image.asset(
+                'assets/images/ticket.png',
+                height: 50,
+              ),
+              const SizedBox(height: 5),
+              Text(
+                'eTiket Situ Bagendit',
+                style:
+                    textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 50),
+              Text(
+                'Selamat Datang',
+                style: textTheme.headlineSmall,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 15),
+              Text(
+                'Silahkan gunakan akun operator untuk login',
+                style:
+                    textTheme.bodyMedium?.copyWith(color: Colors.grey.shade700),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 15),
+              TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'username',
                 ),
+                controller: _usernameController,
+                readOnly: settingController.api.isEmpty,
               ),
-              controller: _passwordController,
-              obscureText: passwordHidden,
-              readOnly: settingController.api.isEmpty,
-            ),
-            const SizedBox(height: 40),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size.fromHeight(50),
+              const SizedBox(height: 10),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'password',
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        passwordHidden = !passwordHidden;
+                      });
+                    },
+                    icon: Icon(passwordHidden
+                        ? CupertinoIcons.eye_slash
+                        : CupertinoIcons.eye),
+                  ),
+                ),
+                controller: _passwordController,
+                obscureText: passwordHidden,
+                readOnly: settingController.api.isEmpty,
               ),
-              onPressed: authController.state is AuthLoading ||
-                      settingController.api.isEmpty
-                  ? null
-                  : () => _onLogin(context),
-              child: authController.state is AuthLoading
-                  ? const SizedBox(
-                      width: 12,
-                      height: 12,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: Colors.grey,
+              const SizedBox(height: 40),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(50),
+                ),
+                onPressed: authController.state is AuthLoading ||
+                        settingController.api.isEmpty
+                    ? null
+                    : () => _onLogin(context),
+                child: authController.state is AuthLoading
+                    ? const SizedBox(
+                        width: 12,
+                        height: 12,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.grey,
+                        ),
+                      )
+                    : const Text('LOGIN'),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              Badge(
+                smallSize: 10,
+                isLabelVisible: settingController.api.isEmpty ||
+                    settingController.printer is! PrinterConnected,
+                child: PopupMenuButton(
+                  tooltip: 'Pengaturan',
+                  onSelected: onSelectMenu,
+                  itemBuilder: (context) => [
+                    PopupMenuItem<PopupMenus>(
+                      value: PopupMenus.printer,
+                      child: Row(
+                        children: [
+                          Badge(
+                            backgroundColor:
+                                settingController.printer is PrinterConnected
+                                    ? Colors.green
+                                    : Colors.red,
+                            smallSize: 10,
+                            child: const Icon(CupertinoIcons.printer),
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          const Text('Pengaturan Printer'),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem<PopupMenus>(
+                      value: PopupMenus.server,
+                      child: Row(
+                        children: [
+                          Badge(
+                            smallSize: 10,
+                            backgroundColor: settingController.api.isNotEmpty
+                                ? Colors.green
+                                : Colors.red,
+                            child: const Icon(CupertinoIcons.globe),
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          const Text('Pengaturan Server'),
+                        ],
                       ),
                     )
-                  : const Text('LOGIN'),
-            ),
-            isMobile
-                ? const SizedBox(
-                    height: 30,
-                  )
-                : const Spacer(),
-            Badge(
-              smallSize: 10,
-              isLabelVisible: settingController.api.isEmpty ||
-                  settingController.printer is! PrinterConnected,
-              child: PopupMenuButton(
-                tooltip: 'Pengaturan',
-                onSelected: onSelectMenu,
-                itemBuilder: (context) => [
-                  PopupMenuItem<PopupMenus>(
-                    value: PopupMenus.printer,
-                    child: Row(
-                      children: [
-                        Badge(
-                          backgroundColor:
-                              settingController.printer is PrinterConnected
-                                  ? Colors.green
-                                  : Colors.red,
-                          smallSize: 10,
-                          child: const Icon(CupertinoIcons.printer),
-                        ),
-                        const SizedBox(
-                          width: 15,
-                        ),
-                        const Text('Pengaturan Printer'),
-                      ],
-                    ),
+                  ],
+                  icon: const Icon(
+                    CupertinoIcons.gear,
                   ),
-                  PopupMenuItem<PopupMenus>(
-                    value: PopupMenus.server,
-                    child: Row(
-                      children: [
-                        Badge(
-                          smallSize: 10,
-                          backgroundColor: settingController.api.isNotEmpty
-                              ? Colors.green
-                              : Colors.red,
-                          child: const Icon(CupertinoIcons.globe),
-                        ),
-                        const SizedBox(
-                          width: 15,
-                        ),
-                        const Text('Pengaturan Server'),
-                      ],
-                    ),
-                  )
-                ],
-                icon: const Icon(
-                  CupertinoIcons.gear,
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            const Text(
-              'Dinas Parisiwisata dan Kebudayaan Garut',
-              textAlign: TextAlign.center,
-            ),
-            const Text(
-              '© 2023',
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              "v${box.read('version') ?? '0'}",
-              textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.grey),
-            ),
-          ],
+              const SizedBox(
+                height: 30,
+              ),
+              const Text(
+                'Dinas Parisiwisata dan Kebudayaan Garut',
+                textAlign: TextAlign.center,
+              ),
+              const Text(
+                '© 2023',
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Text(
+                "v${box.read('version') ?? '0'}",
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.grey),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -13,10 +13,7 @@ class Login extends StatelessWidget {
       body: ResponsiveBreakpoints.of(context).isMobile
           ? const Padding(
               padding: EdgeInsets.all(15),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [LoginForm()],
-              ),
+              child: Center(child: LoginForm()),
             )
           : Stack(
               children: [
@@ -33,8 +30,11 @@ class Login extends StatelessWidget {
                   top: 15,
                   bottom: 15,
                   child: SizedBox(
+                    height: double.infinity,
                     width: 350,
-                    child: LoginForm(),
+                    child: SingleChildScrollView(
+                      child: LoginForm(),
+                    ),
                   ),
                 ),
               ],
