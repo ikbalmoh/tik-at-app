@@ -98,7 +98,7 @@ class _ApiConfigState extends State<ApiConfig> {
                   controller: urlController,
                   decoration: const InputDecoration(
                     labelText: 'Server URL',
-                    hintText: 'http://192.168.1.1',
+                    hintText: 'http://192.168.100.4',
                   ),
                   autofocus: true,
                   onChanged: onChangeUrl,

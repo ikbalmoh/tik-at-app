@@ -29,9 +29,11 @@ class _LoginFormState extends State<LoginForm> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (settingController.api.isEmpty) {
-        settingController.openApiSetting();
-      }
+      Future.delayed(const Duration(seconds: 3)).then((_) {
+        if (settingController.api.isEmpty) {
+          settingController.openApiSetting();
+        }
+      });
     });
     super.initState();
   }
