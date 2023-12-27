@@ -69,100 +69,106 @@ class _AddTicketDialogState extends State<AddTicketDialog> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
         ),
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.only(bottom: 10),
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    width: 0.5,
-                    color: Colors.black12,
-                  ),
-                ),
-              ),
-              margin: const EdgeInsets.only(bottom: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    item == null ? 'Tambah Tiket' : 'Edit Tiket',
-                    style: textTheme.headlineSmall,
-                  ),
-                  Badge(
-                    label: Text(
-                      widget.ticket.name,
-                      style: textTheme.bodyLarge,
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.only(bottom: 10),
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      width: 0.5,
+                      color: Colors.black12,
                     ),
-                    backgroundColor: widget.ticket.color,
-                    largeSize: 28,
-                    smallSize: 24,
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 7.5,
-            ),
-            rowField(
-              'Harga Tiket',
-              CurrencyFormat.idr(widget.ticket.price, 0),
-              textTheme,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            rowField(
-              'Jumlah Tiket',
-              Flexible(
-                fit: FlexFit.tight,
-                child: TextFormField(
-                  textAlign: TextAlign.right,
-                  controller: qty,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Jumlah Tiket',
-                    contentPadding: EdgeInsets.zero,
-                    isDense: true,
-                    hintStyle: TextStyle(color: Colors.grey),
-                  ),
-                  autofocus: true,
+                ),
+                margin: const EdgeInsets.only(bottom: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      item == null ? 'Tambah Tiket' : 'Edit Tiket',
+                      style: textTheme.headlineSmall,
+                    ),
+                    Badge(
+                      label: Text(
+                        widget.ticket.name,
+                        style: textTheme.bodyLarge,
+                      ),
+                      backgroundColor: widget.ticket.color,
+                      largeSize: 28,
+                      smallSize: 24,
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                    ),
+                  ],
                 ),
               ),
-              textTheme,
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  TextButton(
-                    onPressed: () => Get.back(),
-                    style: TextButton.styleFrom(foregroundColor: Colors.grey),
-                    child: const Text('Batal'),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  TextButton(
-                    onPressed: () => submit(),
-                    child: Text(item == null ? 'Simpan' : 'Perbaharui'),
-                  ),
-                ],
+              const SizedBox(
+                height: 7.5,
               ),
-            )
-          ],
+              rowField(
+                'Harga Tiket',
+                CurrencyFormat.idr(widget.ticket.price, 0),
+                textTheme,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              rowField(
+                'Jumlah Tiket',
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: TextFormField(
+                    textAlign: TextAlign.right,
+                    controller: qty,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Jumlah Tiket',
+                      contentPadding: EdgeInsets.zero,
+                      isDense: true,
+                      hintStyle: TextStyle(color: Colors.grey),
+                    ),
+                    autofocus: true,
+                    scrollPadding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+                    ),
+                  ),
+                ),
+                textTheme,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () => Get.back(),
+                      style: TextButton.styleFrom(foregroundColor: Colors.grey),
+                      child: const Text('Batal'),
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    TextButton(
+                      onPressed: () => submit(),
+                      child: Text(item == null ? 'Simpan' : 'Perbaharui'),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

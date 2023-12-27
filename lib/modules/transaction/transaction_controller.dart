@@ -96,7 +96,9 @@ class TransactionController extends GetxController {
       TransactionInProgress cart = _state.value as TransactionInProgress;
       List<TransactionItem> filteredTickets = [...cart.tickets];
       filteredTickets.removeWhere((t) => t.ticketTypeId == id);
-      _state.value = cart.copyWith(tickets: filteredTickets);
+      _state.value = filteredTickets.isNotEmpty
+          ? cart.copyWith(tickets: filteredTickets)
+          : const TransactionInProgress();
     }
   }
 

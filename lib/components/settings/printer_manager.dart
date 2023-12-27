@@ -55,95 +55,99 @@ class _PrinterManagerState extends State<PrinterManager> {
           borderRadius: BorderRadius.circular(15),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.only(bottom: 5),
-              margin: const EdgeInsets.only(bottom: 10),
-              decoration: const BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    width: 0.5,
-                    color: Colors.black12,
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.only(bottom: 5),
+                margin: const EdgeInsets.only(bottom: 10),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      width: 0.5,
+                      color: Colors.black12,
+                    ),
                   ),
                 ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'Printer',
-                    style: textTheme.headlineSmall,
-                  ),
-                  controller.loading
-                      ? const Padding(
-                          padding: EdgeInsets.all(12.0),
-                          child: SizedBox(
-                            width: 18,
-                            height: 18,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        )
-                      : IconButton(
-                          padding: const EdgeInsets.all(0),
-                          onPressed: () => controller.scanPrinters(),
-                          icon: const Icon(
-                            CupertinoIcons.search,
-                            size: 18,
-                          ),
-                        )
-                ],
-              ),
-            ),
-            controller.devices.isNotEmpty
-                ? Column(
-                    children: controller.devices
-                        .map((d) => ListTile(
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 0,
-                                vertical: 0,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Printer',
+                      style: textTheme.headlineSmall,
+                    ),
+                    controller.loading
+                        ? const Padding(
+                            padding: EdgeInsets.all(12.0),
+                            child: SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.grey,
                               ),
-                              title: Text(d.name ?? ''),
-                              subtitle: Text(d.address ?? '-'),
-                              onTap: () => controller.selectPrinter(d),
-                              trailing: deviceIndicator(controller.printer, d),
-                            ))
-                        .toList(),
-                  )
-                : Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 40),
-                    child: Center(
-                      child: Text(
-                        controller.loading
-                            ? 'Mencari Perangkat'
-                            : 'Tidak Ada Perangkat Terdeteksi',
-                        style: const TextStyle(
-                          color: Colors.grey,
+                            ),
+                          )
+                        : IconButton(
+                            padding: const EdgeInsets.all(0),
+                            onPressed: () => controller.scanPrinters(),
+                            icon: const Icon(
+                              CupertinoIcons.search,
+                              size: 18,
+                            ),
+                          )
+                  ],
+                ),
+              ),
+              controller.devices.isNotEmpty
+                  ? Column(
+                      children: controller.devices
+                          .map((d) => ListTile(
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 0,
+                                  vertical: 0,
+                                ),
+                                title: Text(d.name ?? ''),
+                                subtitle: Text(d.address ?? '-'),
+                                onTap: () => controller.selectPrinter(d),
+                                trailing:
+                                    deviceIndicator(controller.printer, d),
+                              ))
+                          .toList(),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 40),
+                      child: Center(
+                        child: Text(
+                          controller.loading
+                              ? 'Mencari Perangkat'
+                              : 'Tidak Ada Perangkat Terdeteksi',
+                          style: const TextStyle(
+                            color: Colors.grey,
+                          ),
                         ),
                       ),
                     ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () => Get.back(),
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.grey,
+                    ),
+                    child: const Text('Tutup'),
                   ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                TextButton(
-                  onPressed: () => Get.back(),
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.grey,
-                  ),
-                  child: const Text('Tutup'),
-                ),
-              ],
-            )
-          ],
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

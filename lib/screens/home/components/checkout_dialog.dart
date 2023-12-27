@@ -108,6 +108,7 @@ class _CheckoutDialogState extends State<CheckoutDialog> {
                 borderRadius: BorderRadius.circular(15),
               ),
               child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -201,6 +202,10 @@ class _CheckoutDialogState extends State<CheckoutDialog> {
                             ),
                           ),
                           readOnly: paymentMethod != 'cash',
+                          scrollPadding: EdgeInsets.only(
+                            bottom:
+                                MediaQuery.of(context).viewInsets.bottom + 10,
+                          ),
                         ),
                       ),
                       textTheme,
@@ -236,6 +241,11 @@ class _CheckoutDialogState extends State<CheckoutDialog> {
                                     fontWeight: FontWeight.w200,
                                     fontSize: 14,
                                   ),
+                                ),
+                                scrollPadding: EdgeInsets.only(
+                                  bottom:
+                                      MediaQuery.of(context).viewInsets.bottom +
+                                          10,
                                 ),
                               ),
                             ),

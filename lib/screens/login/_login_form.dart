@@ -85,9 +85,9 @@ class _LoginFormState extends State<LoginForm> {
             )
           ],
         ),
-        padding: const EdgeInsets.all(30.0),
         child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
+          padding: const EdgeInsets.all(30.0),
+          physics: const BouncingScrollPhysics(),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -126,6 +126,9 @@ class _LoginFormState extends State<LoginForm> {
                 ),
                 controller: _usernameController,
                 readOnly: settingController.api.isEmpty,
+                scrollPadding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+                ),
               ),
               const SizedBox(height: 10),
               TextFormField(
@@ -145,6 +148,9 @@ class _LoginFormState extends State<LoginForm> {
                 controller: _passwordController,
                 obscureText: passwordHidden,
                 readOnly: settingController.api.isEmpty,
+                scrollPadding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+                ),
               ),
               const SizedBox(height: 40),
               ElevatedButton(

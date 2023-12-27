@@ -73,15 +73,20 @@ class _CartState extends State<Cart> {
           TransactionInProgress cart =
               controller.state as TransactionInProgress;
           return Container(
+            height: double.infinity,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15),
             ),
             child: cart.tickets.isNotEmpty
                 ? Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Expanded(
                         child: ListView(
+                          shrinkWrap: true,
                           padding: const EdgeInsets.all(10),
                           children: cart.tickets
                               .asMap()
@@ -98,38 +103,38 @@ class _CartState extends State<Cart> {
                               .toList(),
                         ),
                       ),
-                      Container(
-                        decoration: const BoxDecoration(
-                          border: Border(
-                            top: BorderSide(
-                              width: 0.5,
-                              color: Colors.black12,
-                            ),
-                            bottom: BorderSide(
-                              width: 0.5,
-                              color: Colors.black12,
-                            ),
-                          ),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: 10,
-                        ),
-                        child: Column(
-                          children: [
-                            summary(
-                              'Subtotal',
-                              CurrencyFormat.idr(cart.subtotal.toDouble(), 0),
-                              textTheme,
-                            ),
-                            summary(
-                              'Total Diskon',
-                              CurrencyFormat.idr(cart.discount.toDouble(), 0),
-                              textTheme,
-                            ),
-                          ],
-                        ),
-                      ),
+                      // Container(
+                      //   decoration: const BoxDecoration(
+                      //     border: Border(
+                      //       top: BorderSide(
+                      //         width: 0.5,
+                      //         color: Color.fromARGB(31, 52, 50, 50),
+                      //       ),
+                      //       bottom: BorderSide(
+                      //         width: 0.5,
+                      //         color: Colors.black12,
+                      //       ),
+                      //     ),
+                      //   ),
+                      //   padding: const EdgeInsets.symmetric(
+                      //     horizontal: 15,
+                      //     vertical: 10,
+                      //   ),
+                      //   child: Column(
+                      //     children: [
+                      //       summary(
+                      //         'Subtotal',
+                      //         CurrencyFormat.idr(cart.subtotal.toDouble(), 0),
+                      //         textTheme,
+                      //       ),
+                      //       summary(
+                      //         'Total Diskon',
+                      //         CurrencyFormat.idr(cart.discount.toDouble(), 0),
+                      //         textTheme,
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 15,

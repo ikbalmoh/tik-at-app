@@ -8,7 +8,6 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.deepPurple,
       body: ResponsiveBreakpoints.of(context).isMobile
           ? const Padding(
@@ -32,9 +31,7 @@ class Login extends StatelessWidget {
                   child: SizedBox(
                     height: double.infinity,
                     width: 350,
-                    child: SingleChildScrollView(
-                      child: LoginForm(),
-                    ),
+                    child: LoginForm(),
                   ),
                 ),
               ],
