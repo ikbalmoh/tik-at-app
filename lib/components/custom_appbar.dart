@@ -49,6 +49,24 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         automaticallyImplyLeading: false,
         actions: [
+          TextButton.icon(
+            style: auth.state is Authenticated
+                ? TextButton.styleFrom(
+                    foregroundColor: Colors.green.shade700,
+                    backgroundColor: Colors.green.shade50,
+                  )
+                : TextButton.styleFrom(
+                    foregroundColor: Colors.red.shade700,
+                    backgroundColor: Colors.red.shade50,
+                  ),
+            onPressed: () => auth.logout(),
+            icon: const Icon(CupertinoIcons.person_crop_circle_fill),
+            label: Text(
+              auth.state is Authenticated
+                  ? (auth.state as Authenticated).user.name
+                  : 'Loket',
+            ),
+          ),
           Badge(
             offset: const Offset(-15, -15),
             backgroundColor: Colors.red,
