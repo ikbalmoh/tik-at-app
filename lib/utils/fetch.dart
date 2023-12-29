@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:tik_at_app/modules/auth/auth.dart';
 import 'package:validators/validators.dart';
+import 'package:get/get.dart' hide Response;
 
 final GetStorage box = GetStorage();
 
@@ -65,6 +67,11 @@ class CustomInterceptors extends Interceptor {
     if (kDebugMode) {
       print(
           'ERROR[${err.response?.statusCode}] \n => JSON: $json\n=> PATH: ${err.requestOptions.path}\n => DATA: $originalData');
+    }
+
+    if (err.response?.statusCode == 401) {
+      AuthController authController = Get.find();
+      authController.clearAuth();
     }
 
     super.onError(err, handler);

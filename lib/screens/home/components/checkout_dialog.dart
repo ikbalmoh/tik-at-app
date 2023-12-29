@@ -311,13 +311,16 @@ class _CheckoutDialogState extends State<CheckoutDialog> {
           );
         }
         return const Dialog(
-          child: Padding(
-            padding: EdgeInsets.all(20),
+          child: SizedBox(
+            height: 200,
+            width: 200,
             child: Center(
               child: SizedBox(
                 width: 20,
                 height: 20,
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                ),
               ),
             ),
           ),

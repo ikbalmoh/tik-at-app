@@ -114,7 +114,7 @@ class _PrinterManagerState extends State<PrinterManager> {
                                 ),
                                 title: Text(d.name ?? ''),
                                 subtitle: Text(d.address ?? '-'),
-                                onTap: () => controller.selectPrinter(d),
+                                onTap: () => controller.selectPrinter(d, true),
                                 trailing:
                                     deviceIndicator(controller.printer, d),
                               ))

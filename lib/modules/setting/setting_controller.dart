@@ -51,7 +51,7 @@ class SettingController extends GetxController {
       if (kDebugMode) {
         print('HAS CONNECTED PRINTER: ${device.toMap()}');
       }
-      selectPrinter(device);
+      selectPrinter(device, false);
     } else {
       if (kDebugMode) {
         print('NO CONNECTED PRINTER');
@@ -173,7 +173,7 @@ class SettingController extends GetxController {
     _devices.value = boundedDevices;
   }
 
-  void selectPrinter(BluetoothDevice device) async {
+  void selectPrinter(BluetoothDevice device, bool testPrinter) async {
     try {
       if (kDebugMode) {
         print('SELECT PRINTER : ${device.toMap()}');
@@ -202,7 +202,9 @@ class SettingController extends GetxController {
       if (connected) {
         _printerState.value = PrinterConnected(device: device);
         box.write('printer', device.toMap());
-        await printExample();
+        if (testPrinter) {
+          await printExample();
+        }
       } else {
         _printerState.value = PrinterNotConnected();
         throw Exception('Tidak dapat terhubung ke perangkat');
