@@ -241,10 +241,6 @@ class SettingController extends GetxController {
     bluetooth.printCustom("TEST PRINTER", 1, 1);
     bluetooth.printNewLine();
     bluetooth.printImageBytes(imageBytesFromAsset);
-    bluetooth.printNewLine();
-    bluetooth.printCustom('-----------------------------', 1, 1);
-    bluetooth.printNewLine();
-    bluetooth.printQRcode("Situ Bagendit", 250, 250, 1);
     bluetooth.paperCut();
   }
 }

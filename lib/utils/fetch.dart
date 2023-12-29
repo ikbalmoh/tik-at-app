@@ -66,6 +66,7 @@ class CustomInterceptors extends Interceptor {
       print(
           'ERROR[${err.response?.statusCode}] \n => JSON: $json\n=> PATH: ${err.requestOptions.path}\n => DATA: $originalData');
     }
+
     super.onError(err, handler);
   }
 }

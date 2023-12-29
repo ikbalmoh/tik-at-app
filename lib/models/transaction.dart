@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class TransactionItem {
   int ticketTypeId;
   String name;
@@ -41,6 +43,7 @@ class Transaction {
   String paymentMethod;
   String? paymentRef;
   List<TransactionItem> tickets;
+  DateTime purchaseDate;
 
   Transaction({
     required this.isGroup,
@@ -50,14 +53,16 @@ class Transaction {
     required this.paymentMethod,
     this.paymentRef,
     required this.tickets,
+    required this.purchaseDate,
   });
 
   @override
   String toString() {
-    return '{"is_group": $isGroup, "pay": $pay, "charge": $charge, "payment_method": $paymentMethod, "payment_ref": $paymentRef, "grand_total": $grandTotal, "tickets": $tickets}';
+    return '{"purchase_date": $purchaseDate, "is_group": $isGroup, "pay": $pay, "charge": $charge, "payment_method": $paymentMethod, "payment_ref": $paymentRef, "grand_total": $grandTotal, "tickets": $tickets}';
   }
 
   Map<String, dynamic> toJson() => {
+        'purchase_date': DateFormat('yyyy-MM-dd hh:mm:ss').format(purchaseDate),
         'is_group': isGroup,
         'pay': pay,
         'charge': charge,

@@ -28,6 +28,7 @@ class TransactionController extends GetxController {
 
   @override
   void onInit() {
+    _loading.value = false;
     _state.value = const TransactionInProgress();
     super.onInit();
   }
@@ -63,6 +64,7 @@ class TransactionController extends GetxController {
         ],
       );
     }
+    _loading.value = false;
   }
 
   void removeTicket(int id, bool alert) {
@@ -115,6 +117,7 @@ class TransactionController extends GetxController {
     if (snackbar) {
       Get.snackbar('Transaksi Direset', 'Silahkan memulai transaksi baru');
     }
+    _loading.value = false;
     _state.value = const TransactionInProgress();
   }
 
@@ -130,6 +133,7 @@ class TransactionController extends GetxController {
         charge = pay - cart.grandTotal;
       }
       final Transaction transaction = Transaction(
+        purchaseDate: DateTime.now(),
         isGroup: false,
         grandTotal: cart.grandTotal,
         pay: pay,
