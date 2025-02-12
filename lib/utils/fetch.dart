@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:tik_at_app/modules/auth/auth.dart';
+import 'package:gartix/modules/auth/auth.dart';
 import 'package:validators/validators.dart';
 import 'package:get/get.dart' hide Response;
 

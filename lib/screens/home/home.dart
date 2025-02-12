@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:tik_at_app/components/custom_appbar.dart';
-import 'package:tik_at_app/modules/setting/setting.dart';
-import 'package:tik_at_app/modules/transaction/transaction.dart';
-import 'package:tik_at_app/screens/home/_cart.dart';
-import 'package:tik_at_app/screens/home/_ticket_container.dart';
+import 'package:gartix/components/custom_appbar.dart';
+import 'package:gartix/modules/setting/setting.dart';
+import 'package:gartix/modules/transaction/transaction.dart';
+import 'package:gartix/screens/home/_cart.dart';
+import 'package:gartix/screens/home/_ticket_container.dart';
 import 'package:flutter/cupertino.dart';
 
 class Home extends StatefulWidget {

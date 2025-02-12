@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:tik_at_app/modules/setting/setting.dart';
-import 'package:tik_at_app/modules/transaction/transaction.dart';
+import 'package:gartix/modules/setting/setting.dart';
+import 'package:gartix/modules/transaction/transaction.dart';
 
 class TransactionDoneDialog extends StatefulWidget {
   const TransactionDoneDialog({super.key});
@@ -40,7 +40,9 @@ class _TransactionDoneDialogState extends State<TransactionDoneDialog> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 15),
                 child: Text(
-                  'Mencetak Tiket',
+                  state.printing || !done
+                      ? 'Mencetak Tiket'
+                      : 'Transaksi Selesai',
                   style: textTheme.headlineSmall,
                   textAlign: TextAlign.center,
                 ),
@@ -73,31 +75,43 @@ class _TransactionDoneDialogState extends State<TransactionDoneDialog> {
               Text(
                 state.printing || !done
                     ? '${state.printCount} / ${state.tickets.length}'
-                    : 'Tiket Selesai Dicetak',
+                    : '${state.tickets.length} Tiket Dicetak',
                 style: textTheme.bodyLarge?.copyWith(color: Colors.black54),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(
                 height: 35,
               ),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(Colors.green.shade500),
+                    foregroundColor: MaterialStateProperty.all(Colors.white),
+                  ),
+                  onPressed: !state.printing && done
+                      ? () => controller.resetTransaction(snackbar: false)
+                      : null,
+                  child: const Text('Selesai'),
+                ),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  const Text('Gagal Cetak?'),
                   TextButton(
                     onPressed: () => setting.printer is PrinterConnected
                         ? controller.printTransactionTickets()
                         : setting.openPrinterSetting(),
-                    child: const Text(
-                      'Cetak Lagi',
-                      style: TextStyle(color: Colors.grey),
+                    child: Text(
+                      'Cetak Ulang',
+                      style: TextStyle(color: Colors.blue.shade500),
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: !state.printing && done
-                        ? () => controller.resetTransaction(snackbar: false)
-                        : null,
-                    child: const Text('Selesai'),
-                  )
                 ],
               )
             ],

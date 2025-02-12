@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tik_at_app/modules/setting/setting.dart';
+import 'package:gartix/modules/setting/setting.dart';
 import 'package:validators/validators.dart';
 
 class ApiConfig extends StatefulWidget {
@@ -90,14 +90,14 @@ class _ApiConfigState extends State<ApiConfig> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 15),
                   child: Text(
-                    'Pengaturan Server',
+                    'Hubungkan ke Server',
                     style: textTheme.headlineSmall,
                   ),
                 ),
                 TextFormField(
                   controller: urlController,
                   decoration: const InputDecoration(
-                    labelText: 'Server URL',
+                    labelText: 'Alamat Server',
                     hintText: 'http://192.168.100.4',
                   ),
                   autofocus: true,

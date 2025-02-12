@@ -5,18 +5,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "tik_at_app",
+      "name": "gartix",
       "request": "launch",
       "type": "dart"
     },
     {
-      "name": "tik_at_app (profile mode)",
+      "name": "gartix (profile mode)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "profile"
     },
     {
-      "name": "tik_at_app (release mode)",
+      "name": "gartix (release mode)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "release"

@@ -6,9 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-import 'package:tik_at_app/models/user.dart';
-import 'package:tik_at_app/modules/auth/auth.dart';
-import 'package:tik_at_app/routes/routes.dart';
+import 'package:gartix/models/user.dart';
+import 'package:gartix/modules/auth/auth.dart';
+import 'package:gartix/routes/routes.dart';
 
 class AuthController extends GetxController {
   final GetStorage box = GetStorage();

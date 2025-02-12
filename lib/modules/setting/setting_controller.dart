@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:tik_at_app/components/settings/api_config.dart';
-import 'package:tik_at_app/components/settings/printer_manager.dart';
-import 'package:tik_at_app/modules/setting/setting.dart';
+import 'package:gartix/components/settings/api_config.dart';
+import 'package:gartix/components/settings/printer_manager.dart';
+import 'package:gartix/modules/setting/setting.dart';
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 
 class SettingController extends GetxController {

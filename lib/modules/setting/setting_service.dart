@@ -1,5 +1,5 @@
 import 'package:get_storage/get_storage.dart';
-import 'package:tik_at_app/utils/fetch.dart';
+import 'package:gartix/utils/fetch.dart';
 
 class SettingService {
   final api = fetch(ignoreBaseUrl: true);

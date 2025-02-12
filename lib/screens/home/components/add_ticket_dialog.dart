@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tik_at_app/models/ticket_type.dart';
-import 'package:tik_at_app/models/transaction.dart';
-import 'package:tik_at_app/modules/transaction/transaction.dart';
-import 'package:tik_at_app/utils/utils.dart';
+import 'package:gartix/models/ticket_type.dart';
+import 'package:gartix/models/transaction.dart';
+import 'package:gartix/modules/transaction/transaction.dart';
+import 'package:gartix/utils/utils.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 class AddTicketDialog extends StatefulWidget {

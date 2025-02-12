@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:tik_at_app/models/ticket_type.dart';
-import 'package:tik_at_app/modules/ticket/ticket.dart';
-import 'package:tik_at_app/modules/transaction/transaction.dart';
-import 'package:tik_at_app/screens/home/components/add_ticket_dialog.dart';
-import 'package:tik_at_app/screens/home/components/ticket_item.dart';
+import 'package:gartix/models/ticket_type.dart';
+import 'package:gartix/modules/ticket/ticket.dart';
+import 'package:gartix/modules/transaction/transaction.dart';
+import 'package:gartix/screens/home/components/add_ticket_dialog.dart';
+import 'package:gartix/screens/home/components/ticket_item.dart';
 
 class TicketContainer extends StatefulWidget {
   const TicketContainer({super.key});

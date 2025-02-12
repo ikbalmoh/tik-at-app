@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tik_at_app/modules/setting/setting.dart';
+import 'package:gartix/modules/setting/setting.dart';
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 
 class PrinterManager extends StatefulWidget {

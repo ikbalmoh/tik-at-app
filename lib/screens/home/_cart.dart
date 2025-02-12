@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tik_at_app/modules/setting/setting.dart';
-import 'package:tik_at_app/modules/transaction/transaction.dart';
-import 'package:tik_at_app/screens/home/components/cart_item.dart';
-import 'package:tik_at_app/utils/utils.dart';
+import 'package:gartix/modules/setting/setting.dart';
+import 'package:gartix/modules/transaction/transaction.dart';
+import 'package:gartix/screens/home/components/cart_item.dart';
+import 'package:gartix/utils/utils.dart';
 import 'components/checkout_dialog.dart';
 
 class Cart extends StatefulWidget {

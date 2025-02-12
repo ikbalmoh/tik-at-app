@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:tik_at_app/screens/login/_login_form.dart';
+import 'package:gartix/screens/login/_login_form.dart';
 
 class Login extends StatelessWidget {
   const Login({Key? key}) : super(key: key);

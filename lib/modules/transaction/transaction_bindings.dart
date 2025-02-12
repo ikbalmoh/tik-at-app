@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:tik_at_app/modules/transaction/transaction.dart';
+import 'package:gartix/modules/transaction/transaction.dart';
 
 class TransactionBindings implements Bindings {
   @override

@@ -2,9 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:tik_at_app/models/ticket_type.dart';
-import 'package:tik_at_app/modules/ticket/ticket.dart';
-import 'package:tik_at_app/data/colors.dart';
+import 'package:gartix/models/ticket_type.dart';
+import 'package:gartix/modules/ticket/ticket.dart';
+import 'package:gartix/data/colors.dart';
 
 class TicketController extends GetxController {
   final GetStorage box = GetStorage();

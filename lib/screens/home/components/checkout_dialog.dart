@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tik_at_app/components/payment_method_button.dart';
-import 'package:tik_at_app/modules/setting/setting.dart';
-import 'package:tik_at_app/modules/transaction/transaction.dart';
-import 'package:tik_at_app/utils/utils.dart';
+import 'package:gartix/components/payment_method_button.dart';
+import 'package:gartix/modules/setting/setting.dart';
+import 'package:gartix/modules/transaction/transaction.dart';
+import 'package:gartix/utils/utils.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 class CheckoutDialog extends StatefulWidget {

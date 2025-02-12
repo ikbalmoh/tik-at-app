@@ -1,13 +1,13 @@
 import 'package:get/get.dart';
-import 'package:tik_at_app/modules/setting/setting.dart';
-import 'package:tik_at_app/modules/transaction/transaction.dart';
-import 'package:tik_at_app/routes/middleware.dart';
-import 'package:tik_at_app/modules/auth/auth.dart';
-import 'package:tik_at_app/modules/ticket/ticket.dart';
+import 'package:gartix/modules/setting/setting.dart';
+import 'package:gartix/modules/transaction/transaction.dart';
+import 'package:gartix/routes/middleware.dart';
+import 'package:gartix/modules/auth/auth.dart';
+import 'package:gartix/modules/ticket/ticket.dart';
 
-import 'package:tik_at_app/screens/splash_screen.dart';
-import 'package:tik_at_app/screens/login/login.dart';
-import 'package:tik_at_app/screens/home/home.dart';
+import 'package:gartix/screens/splash_screen.dart';
+import 'package:gartix/screens/login/login.dart';
+import 'package:gartix/screens/home/home.dart';
 
 class Routes {
   static const String root = '/';

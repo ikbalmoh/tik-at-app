@@ -5,6 +5,7 @@ ThemeData appTheme(BuildContext context) {
     primarySwatch: Colors.blue,
     colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
     useMaterial3: true,
+    applyElevationOverlayColor: false,
     appBarTheme: AppBarTheme(
       titleTextStyle: TextStyle(
         color: Colors.blueGrey.shade700,

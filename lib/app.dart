@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tik_at_app/modules/auth/auth.dart';
+import 'package:gartix/modules/auth/auth.dart';
 
-import 'package:tik_at_app/routes/routes.dart';
+import 'package:gartix/routes/routes.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:flutter/services.dart';
-import 'package:tik_at_app/utils/theme.dart';
+import 'package:gartix/utils/theme.dart';
 
 class App extends StatelessWidget {
   final bool hasToken;

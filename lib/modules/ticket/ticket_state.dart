@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:tik_at_app/models/ticket_type.dart';
+import 'package:gartix/models/ticket_type.dart';
 
 class TicketState extends Equatable {
   const TicketState();

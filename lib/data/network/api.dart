@@ -1,4 +1,4 @@
-import 'package:tik_at_app/utils/fetch.dart';
+import 'package:gartix/utils/fetch.dart';
 
 class ApiUrl {
   static const String auth = '/auth/operator';

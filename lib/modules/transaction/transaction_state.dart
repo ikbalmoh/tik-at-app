@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
-import 'package:tik_at_app/models/ticket.dart';
-import 'package:tik_at_app/models/transaction.dart';
+import 'package:gartix/models/ticket.dart';
+import 'package:gartix/models/transaction.dart';
 
 class TransactionState extends Equatable {
   const TransactionState();

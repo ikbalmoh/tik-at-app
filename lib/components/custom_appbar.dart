@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:tik_at_app/modules/auth/auth.dart';
-import 'package:tik_at_app/modules/setting/setting.dart';
+import 'package:gartix/modules/auth/auth.dart';
+import 'package:gartix/modules/setting/setting.dart';
 
 enum PopupMenus { logout, server, printer }
 

@@ -1,4 +1,4 @@
-package dev.ikbalmoh.tikat
+package dev.ikbalmoh.gartix
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tik_at_app/models/transaction.dart';
-import 'package:tik_at_app/utils/utils.dart';
+import 'package:gartix/models/transaction.dart';
+import 'package:gartix/utils/utils.dart';
 
 class CartItem extends StatelessWidget {
   const CartItem({

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:tik_at_app/models/user.dart';
+import 'package:gartix/models/user.dart';
 
 class AuthState extends Equatable {
   const AuthState();

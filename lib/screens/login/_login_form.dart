@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tik_at_app/modules/auth/auth.dart';
-import 'package:tik_at_app/modules/setting/setting.dart';
+import 'package:gartix/modules/auth/auth.dart';
+import 'package:gartix/modules/setting/setting.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -232,7 +232,7 @@ class _LoginFormState extends State<LoginForm> {
                 height: 30,
               ),
               const Text(
-                'Dinas Parisiwisata dan Kebudayaan Garut',
+                'DISPARBUD Kab. Garut',
                 textAlign: TextAlign.center,
               ),
               const Text(

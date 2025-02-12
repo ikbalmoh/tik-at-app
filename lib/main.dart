@@ -2,11 +2,11 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:tik_at_app/app.dart';
+import 'package:gartix/app.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:tik_at_app/modules/auth/auth.dart';
+import 'package:gartix/modules/auth/auth.dart';
 import 'package:get/get.dart';
-import 'package:tik_at_app/modules/setting/setting.dart';
+import 'package:gartix/modules/setting/setting.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 Future initServices() async {

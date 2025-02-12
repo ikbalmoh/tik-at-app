@@ -1,4 +1,4 @@
-import 'package:tik_at_app/data/network/api.dart';
+import 'package:gartix/data/network/api.dart';
 
 class TransactionService {
   final Api api = Api();
