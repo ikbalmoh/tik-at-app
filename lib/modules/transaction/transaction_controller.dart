@@ -3,11 +3,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gartix/models/transaction.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:gartix/models/ticket.dart';
 import 'package:gartix/models/ticket_type.dart';
-import 'package:gartix/models/transaction.dart';
+import 'package:gartix/models/transaction_payload.dart';
 import 'package:gartix/modules/transaction/transaction.dart';
 import 'package:gartix/screens/home/components/transaction_done_dialog.dart';
 import 'package:gartix/utils/formater.dart';
@@ -38,8 +39,8 @@ class TransactionController extends GetxController {
       return removeTicket(ticket.id, false);
     }
     TransactionInProgress cart = _state.value as TransactionInProgress;
-    List<TransactionItem> items = cart.tickets;
-    TransactionItem? item =
+    List<TransactionPayloadItem> items = cart.tickets;
+    TransactionPayloadItem? item =
         items.firstWhereOrNull((t) => t.ticketTypeId == ticket.id);
     if (item != null) {
       item.qty = qty;
@@ -53,7 +54,7 @@ class TransactionController extends GetxController {
       _state.value = cart.copyWith(
         tickets: [
           ...cart.tickets,
-          TransactionItem(
+          TransactionPayloadItem(
             ticketTypeId: ticket.id,
             name: ticket.name,
             price: ticket.price,
@@ -96,7 +97,7 @@ class TransactionController extends GetxController {
       );
     } else {
       TransactionInProgress cart = _state.value as TransactionInProgress;
-      List<TransactionItem> filteredTickets = [...cart.tickets];
+      List<TransactionPayloadItem> filteredTickets = [...cart.tickets];
       filteredTickets.removeWhere((t) => t.ticketTypeId == id);
       _state.value = filteredTickets.isNotEmpty
           ? cart.copyWith(tickets: filteredTickets)
@@ -104,7 +105,7 @@ class TransactionController extends GetxController {
     }
   }
 
-  double getSubtotal(List<TransactionItem> tickets) {
+  double getSubtotal(List<TransactionPayloadItem> tickets) {
     double subTotal = 0;
     for (var ticket in tickets) {
       subTotal += ticket.subtotal;
@@ -121,7 +122,12 @@ class TransactionController extends GetxController {
     _state.value = const TransactionInProgress();
   }
 
-  void submitTransaction(String paymentMethod, double pay, String refNo) async {
+  void submitTransaction({
+    required String paymentMethod,
+    required double pay,
+    String? refNo,
+    required bool printTicket,
+  }) async {
     if (_state.value is! TransactionInProgress) {
       return;
     }
@@ -132,7 +138,7 @@ class TransactionController extends GetxController {
       if (paymentMethod == 'cash' && pay > cart.grandTotal) {
         charge = pay - cart.grandTotal;
       }
-      final Transaction transaction = Transaction(
+      final TransactionPayload payload = TransactionPayload(
         purchaseDate: DateTime.now(),
         isGroup: false,
         grandTotal: cart.grandTotal,
@@ -141,7 +147,8 @@ class TransactionController extends GetxController {
         paymentMethod: paymentMethod,
         tickets: cart.tickets,
       );
-      final data = await _service.postTransaction(transaction.toJson());
+
+      final data = await _service.postTransaction(payload.toJson());
 
       Get.back(closeOverlays: true);
       Get.showSnackbar(GetSnackBar(
@@ -150,13 +157,20 @@ class TransactionController extends GetxController {
         duration: const Duration(seconds: 5),
       ));
 
+      Transaction transaction = Transaction.fromJson(data['transaction']);
+
       List<Ticket> tickets = (data['tickets'] as List<dynamic>)
           .map((e) => Ticket.fromJson(e))
           .toList();
 
       _loading.value = false;
-      _state.value =
-          TransactionDone(tickets: tickets, printing: true, printCount: 0);
+      _state.value = TransactionDone(
+        printTicket: printTicket,
+        transaction: transaction,
+        tickets: tickets,
+        printing: true,
+        printCount: 0,
+      );
 
       return printTransactionTickets();
     } on DioException catch (e) {
@@ -178,6 +192,8 @@ class TransactionController extends GetxController {
         backgroundColor: Colors.red.shade50,
         snackPosition: SnackPosition.TOP,
       );
+    } finally {
+      _loading.value = false;
     }
   }
 
@@ -190,17 +206,23 @@ class TransactionController extends GetxController {
         .copyWith(printCount: 0, printing: true);
     TransactionDone trx = _state.value as TransactionDone;
     try {
+      _state.value = trx.copyWith(printCount: 0, printing: true);
       Get.dialog(const TransactionDoneDialog(), barrierDismissible: false);
-      for (int i = 0; i < trx.tickets.length; i++) {
-        _state.value = trx.copyWith(printCount: (i + 1), printing: true);
-        if (kDebugMode) {
-          print('PRINTING: ${i + 1} / ${trx.tickets.length}');
-          print(_state.value.toString());
+      await printReceipt(trx.transaction);
+      if (trx.printTicket) {
+        for (int i = 0; i < trx.tickets.length; i++) {
+          _state.value = trx.copyWith(printCount: (i + 1), printing: true);
+          if (kDebugMode) {
+            print('PRINTING: ${i + 1} / ${trx.tickets.length}');
+            print(_state.value.toString());
+          }
+          await printTicket(trx.tickets[i]);
         }
-        await printTicket(trx.tickets[i]);
+        _state.value =
+            trx.copyWith(printing: false, printCount: trx.tickets.length);
+      } else {
+        _state.value = trx.copyWith(printing: false, printCount: 0);
       }
-      _state.value =
-          trx.copyWith(printing: false, printCount: trx.tickets.length);
       if (kDebugMode) {
         print('PRINT COMPLETED: ${_state.value.toString()}');
       }
@@ -212,9 +234,9 @@ class TransactionController extends GetxController {
     }
   }
 
-  Future<void> printTicket(Ticket ticket) async {
+  Future<void> printReceipt(Transaction transaction) async {
     if (kDebugMode) {
-      print('PRINT TICKET: ${ticket.toString()}');
+      print('PRINT TRANSACTION: ${transaction.toString()}');
     }
     bool? isConnected = await bluetooth.isConnected ?? false;
     if (!isConnected) {
@@ -228,27 +250,66 @@ class TransactionController extends GetxController {
 
     await bluetooth.printImageBytes(imageBytesFromAsset);
     await bluetooth.printNewLine();
+    await bluetooth.printCustom('Situ Bagendit', 3, 1);
+    await bluetooth.printNewLine();
+    await bluetooth.printCustom(separator, 1, 1);
+    await bluetooth.printLeftRight('Waktu',
+        DateFormat('dd/MM/yy hh:mm').format(transaction.purchaseDate), 1);
+    await bluetooth.printLeftRight('Operator', transaction.operatorName, 1);
+    int totalTicket = transaction.details
+        .map((d) => d.qty)
+        .reduce((value, element) => value + element);
+    await bluetooth.printLeftRight('Jumlah Tiket', totalTicket.toString(), 1);
+    await bluetooth.printCustom(separator, 1, 1);
+    for (var i = 0; i < transaction.details.length; i++) {
+      final detail = transaction.details[i];
+      await bluetooth.printLeftRight('${detail.qty} x ${detail.ticketTypeName}',
+          CurrencyFormat.idr(detail.total, 0), 1);
+    }
+    await bluetooth.printCustom(separator, 1, 1);
+    await bluetooth.printLeftRight(
+        'Total', CurrencyFormat.idr(transaction.grandTotal, 0), 1);
+    await bluetooth.printLeftRight(
+        'Bayar', CurrencyFormat.idr(transaction.pay, 0), 1);
+    await bluetooth.printLeftRight(
+        'Kembali', CurrencyFormat.idr(transaction.charge, 0), 1);
+    await bluetooth.printLeftRight('Pembayaran', transaction.paymentMethod, 1);
+    await bluetooth.printCustom(separator, 1, 1);
+    await bluetooth.printNewLine();
+    await bluetooth.printCustom('Terimakasih atas Kunjungan Anda', 1, 1);
+    await bluetooth.printNewLine();
+    await bluetooth.printCustom(
+        'Dinas Parisiwisata dan\nKebudayaan Garut', 1, 1);
+    await bluetooth.paperCut();
+
+    return Future.value();
+  }
+
+  Future<void> printTicket(Ticket ticket) async {
+    if (kDebugMode) {
+      print('PRINT TICKET: ${ticket.toString()}');
+    }
+    bool? isConnected = await bluetooth.isConnected ?? false;
+    if (!isConnected) {
+      throw Future.error('printer tidak terkoneksi');
+    }
+    String separator = '--------------------------------';
+
     await bluetooth.printCustom('TIKET MASUK', 3, 1);
-    await bluetooth.printCustom('Situ Bagendit', 2, 1);
     await bluetooth.printNewLine();
     await bluetooth.printCustom(separator, 1, 1);
     await bluetooth.printLeftRight(
         'Waktu', DateFormat('dd/MM/yy hh:mm').format(ticket.purchaseDate), 1);
-    await bluetooth.printLeftRight('Operator', ticket.operatorName, 1);
-    await bluetooth.printCustom(separator, 1, 1);
-    await bluetooth.printLeftRight('Tiket', ticket.ticketTypeName, 1);
-    await bluetooth.printLeftRight(
-        'Harga', CurrencyFormat.idr(ticket.ticketPrice, 0), 1);
     await bluetooth.printLeftRight(
         'Berlaku untuk', '${ticket.entranceMax} orang', 1);
     await bluetooth.printCustom(separator, 1, 1);
-    await bluetooth.printNewLine();
-    await bluetooth.printCustom(
-        'Dinas Parisiwisata dan\nKebudayaan Garut', 1, 1);
-    await bluetooth.printNewLine();
+    await bluetooth.printCustom('Scan tiket di pintu masuk', 1, 1);
     await bluetooth.printQRcode(ticket.id, 250, 250, 1);
     await bluetooth.printNewLine();
     await bluetooth.printCustom('Terimakasih atas Kunjungan Anda', 1, 1);
+    await bluetooth.printNewLine();
+    await bluetooth.printCustom(
+        'Dinas Parisiwisata dan\nKebudayaan Garut', 1, 1);
     await bluetooth.paperCut();
 
     return Future.value();

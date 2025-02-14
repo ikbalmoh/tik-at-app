@@ -30,7 +30,7 @@ class App extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       enableLog: kDebugMode,
-      title: 'eTiket Situ Bagendit',
+      title: 'eTiket Pariwisata',
       theme: appTheme(context),
       builder: (context, child) => ResponsiveBreakpoints.builder(
         breakpoints: const [

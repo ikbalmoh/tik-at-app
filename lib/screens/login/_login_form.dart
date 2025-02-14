@@ -104,7 +104,7 @@ class _LoginFormState extends State<LoginForm> {
               ),
               const SizedBox(height: 5),
               Text(
-                'eTiket Situ Bagendit',
+                'eTiket Pariwisata',
                 style:
                     textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
               ),

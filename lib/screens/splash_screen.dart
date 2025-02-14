@@ -18,7 +18,7 @@ class SplashScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              'eTiket Situ Bagendit',
+              'eTiket Pariwisata',
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge

@@ -7,9 +7,11 @@ ThemeData appTheme(BuildContext context) {
     useMaterial3: true,
     applyElevationOverlayColor: false,
     appBarTheme: AppBarTheme(
+      backgroundColor: Colors.white,
+      surfaceTintColor: Colors.white,
       titleTextStyle: TextStyle(
         color: Colors.blueGrey.shade700,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.bold,
       ),
       actionsIconTheme: IconThemeData(
         color: Colors.blueGrey.shade400,
@@ -22,6 +24,10 @@ ThemeData appTheme(BuildContext context) {
       ),
       bodyLarge: TextStyle(fontWeight: FontWeight.bold),
       labelLarge: TextStyle(fontWeight: FontWeight.w600),
+    ),
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      backgroundColor: Colors.white,
+      foregroundColor: Colors.blue,
     ),
   );
 }

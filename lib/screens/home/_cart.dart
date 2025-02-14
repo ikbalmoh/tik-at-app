@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gartix/modules/setting/setting.dart';
@@ -19,11 +20,12 @@ class _CartState extends State<Cart> {
   SettingController settingController = Get.find();
 
   void openPayment() {
-    if (settingController.printer is PrinterConnected) {
-      Get.dialog(
-        const CheckoutDialog(),
-        barrierDismissible: false,
-      );
+    if (kDebugMode || settingController.printer is PrinterConnected) {
+      showCupertinoModalPopup(context: context, builder: (context) => const CheckoutDialog());
+      // Get.dialog(
+      //   const CheckoutDialog(),
+      //   barrierDismissible: false,
+      // );
     } else {
       Get.dialog(
         AlertDialog(

@@ -1,74 +1,45 @@
-import 'package:intl/intl.dart';
+// ignore_for_file: invalid_annotation_target
 
-class TransactionItem {
-  int ticketTypeId;
-  String name;
-  double price;
-  int qty;
-  double subtotal;
-  double discount;
-  double total;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  TransactionItem({
-    required this.ticketTypeId,
-    required this.name,
-    required this.price,
-    required this.qty,
-    this.discount = 0,
-    required this.subtotal,
-    required this.total,
-  });
+part 'transaction.freezed.dart';
+part 'transaction.g.dart';
 
-  Map<String, dynamic> toJson() => {
-        'ticket_type_id': ticketTypeId,
-        'name': name,
-        'price': price,
-        'qty': qty,
-        'discount': discount,
-        'subtotal': subtotal,
-        'total': total,
-      };
+@freezed
+class Transaction with _$Transaction {
+  const Transaction._();
 
-  @override
-  String toString() {
-    return '{"ticket_type_id": $ticketTypeId, "name": $name, "price": $price, "qty": $qty, "discount": $discount, "subtotal": $subtotal, "total": $total}';
-  }
+  @JsonSerializable(fieldRename: FieldRename.snake)
+  const factory Transaction({
+    required String id,
+    required double grandTotal,
+    required double pay,
+    required double charge,
+    required String paymentMethod,
+    required String operatorName,
+    required DateTime purchaseDate,
+    required List<TransactionDetail> details,
+  }) = _Transaction;
+
+  factory Transaction.fromJson(Map<String, dynamic> json) =>
+      _$TransactionFromJson(json);
 }
 
-class Transaction {
-  bool isGroup;
-  double grandTotal;
-  double pay;
-  double charge;
-  String paymentMethod;
-  String? paymentRef;
-  List<TransactionItem> tickets;
-  DateTime purchaseDate;
+@freezed
+class TransactionDetail with _$TransactionDetail {
+  const TransactionDetail._();
 
-  Transaction({
-    required this.isGroup,
-    required this.grandTotal,
-    required this.pay,
-    required this.charge,
-    required this.paymentMethod,
-    this.paymentRef,
-    required this.tickets,
-    required this.purchaseDate,
-  });
+  @JsonSerializable(fieldRename: FieldRename.snake)
+  const factory TransactionDetail({
+    required int id,
+    required double price,
+    required int qty,
+    required double subtotal,
+    required double discount,
+    required double total,
+    required String ticketTypeName,
+  }) = _TransactionDetail;
 
-  @override
-  String toString() {
-    return '{"purchase_date": $purchaseDate, "is_group": $isGroup, "pay": $pay, "charge": $charge, "payment_method": $paymentMethod, "payment_ref": $paymentRef, "grand_total": $grandTotal, "tickets": $tickets}';
-  }
-
-  Map<String, dynamic> toJson() => {
-        'purchase_date': DateFormat('yyyy-MM-dd hh:mm:ss').format(purchaseDate),
-        'is_group': isGroup,
-        'pay': pay,
-        'charge': charge,
-        'payment_method': paymentMethod,
-        'payment_ref': paymentRef,
-        'grand_total': grandTotal,
-        'tickets': tickets.map((ticket) => ticket.toJson()).toList()
-      };
+  factory TransactionDetail.fromJson(Map<String, dynamic> json) =>
+      _$TransactionDetailFromJson(json);
 }

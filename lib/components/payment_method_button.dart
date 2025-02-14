@@ -18,8 +18,8 @@ class PaymentMethodButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
-        side: const BorderSide(
-          color: Colors.blueGrey,
+        side: BorderSide(
+          color: active ? Colors.blue.shade700 : Colors.blueGrey,
         ),
         borderRadius: BorderRadius.circular(10),
       ),
@@ -30,11 +30,22 @@ class PaymentMethodButton extends StatelessWidget {
         onTap: () => onSelect(value),
         child: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: Center(
-            child: Text(
-              name,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
+          child: Row(
+            children: [
+              Icon(
+                active
+                    ? Icons.radio_button_checked_rounded
+                    : Icons.radio_button_off,
+                color: active ? Colors.blue.shade700 : Colors.black54,
+              ),
+              Expanded(
+                child: Text(
+                  name,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
           ),
         ),
       ),

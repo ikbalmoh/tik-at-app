@@ -30,15 +30,19 @@ environment:
 dependencies:
   blue_thermal_printer: ^1.2.3
   cupertino_icons: ^1.0.6
+  currency_text_input_formatter: ^2.2.8
   device_info_plus: ^9.1.1
   dio: ^5.4.0
   equatable: ^2.0.5
   flutter:
     sdk: flutter
+  freezed: ^2.5.2
+  freezed_annotation: ^2.4.4
   get: ^4.6.6
   get_storage: ^2.1.1
   google_fonts: ^6.1.0
   intl: ^0.19.0
+  json_annotation: ^4.9.0
   package_info_plus: ^5.0.1
   path_provider: ^2.1.1
   responsive_framework: ^1.1.1
@@ -46,9 +50,11 @@ dependencies:
   validators: ^3.0.0
 
 dev_dependencies:
+  build_runner: ^2.4.9
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
+  json_serializable: ^6.8.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

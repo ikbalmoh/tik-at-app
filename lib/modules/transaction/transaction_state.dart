@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:gartix/models/ticket.dart';
 import 'package:gartix/models/transaction.dart';
+import 'package:gartix/models/transaction_payload.dart';
 
 class TransactionState extends Equatable {
   const TransactionState();
@@ -10,7 +11,7 @@ class TransactionState extends Equatable {
 }
 
 class TransactionInProgress extends TransactionState {
-  final List<TransactionItem> tickets;
+  final List<TransactionPayloadItem> tickets;
   final double subtotal;
   final double discount;
   final double grandTotal;
@@ -23,7 +24,7 @@ class TransactionInProgress extends TransactionState {
   });
 
   TransactionInProgress copyWith({
-    List<TransactionItem>? tickets,
+    List<TransactionPayloadItem>? tickets,
     // double? subtotal,
     double? discount,
     // double? grandTotal,
@@ -45,20 +46,32 @@ class TransactionInProgress extends TransactionState {
 }
 
 class TransactionDone extends TransactionState {
+  final Transaction transaction;
   final List<Ticket> tickets;
   final bool printing;
+  final bool printTicket;
   final int printCount;
 
-  const TransactionDone(
-      {required this.tickets,
-      required this.printing,
-      required this.printCount});
+  const TransactionDone({
+    required this.transaction,
+    required this.tickets,
+    required this.printTicket,
+    required this.printing,
+    required this.printCount,
+  });
 
-  TransactionDone copyWith(
-      {List<Ticket>? tickets, bool? printing, int? printCount}) {
+  TransactionDone copyWith({
+    Transaction? transaction,
+    List<Ticket>? tickets,
+    bool? printing,
+    bool? printTicket,
+    int? printCount,
+  }) {
     return TransactionDone(
+        transaction: transaction ?? this.transaction,
         tickets: tickets ?? this.tickets,
         printing: printing ?? this.printing,
+        printTicket: printTicket ?? this.printTicket,
         printCount: printCount ?? this.printCount);
   }
 

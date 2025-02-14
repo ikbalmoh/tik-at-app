@@ -76,7 +76,6 @@ class _HomeState extends State<Home> {
                   padding: const EdgeInsets.all(20.0),
                   child: FloatingActionButton(
                     tooltip: 'Kerangjang',
-                    backgroundColor: Colors.blue.shade100,
                     onPressed: () {
                       showModalBottomSheet(
                         showDragHandle: true,

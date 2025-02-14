@@ -52,29 +52,33 @@ class _TicketContainerState extends State<TicketContainer> {
               ),
             ),
             Expanded(
-                child: GridView.count(
-              padding: const EdgeInsets.all(15),
-              physics: const ScrollPhysics(),
-              shrinkWrap: false,
-              crossAxisCount:
-                  ResponsiveBreakpoints.of(context).isMobile ? 1 : 3,
-              mainAxisSpacing: 15,
-              crossAxisSpacing: 15,
-              childAspectRatio: 1.5,
-              children: state.tickets.asMap().entries.map((ticket) {
-                return TicketItem(
-                  ticket: ticket.value,
-                  onPress: () => selectTicket(ticket.value),
-                  qtyCart: transactionController.state is TransactionInProgress
-                      ? (transactionController.state as TransactionInProgress)
-                              .tickets
-                              .firstWhereOrNull(
-                                  (t) => t.ticketTypeId == ticket.value.id)
-                              ?.qty ??
-                          0
-                      : 0,
-                );
-              }).toList(),
+                child: RefreshIndicator(
+              onRefresh: () => controller.loadTickets(),
+              child: GridView.count(
+                padding: const EdgeInsets.all(15),
+                physics: const ScrollPhysics(),
+                shrinkWrap: false,
+                crossAxisCount:
+                    ResponsiveBreakpoints.of(context).isMobile ? 1 : 3,
+                mainAxisSpacing: 15,
+                crossAxisSpacing: 15,
+                childAspectRatio: 1.5,
+                children: state.tickets.asMap().entries.map((ticket) {
+                  return TicketItem(
+                    ticket: ticket.value,
+                    onPress: () => selectTicket(ticket.value),
+                    qtyCart: transactionController.state
+                            is TransactionInProgress
+                        ? (transactionController.state as TransactionInProgress)
+                                .tickets
+                                .firstWhereOrNull(
+                                    (t) => t.ticketTypeId == ticket.value.id)
+                                ?.qty ??
+                            0
+                        : 0,
+                  );
+                }).toList(),
+              ),
             ))
           ],
         );

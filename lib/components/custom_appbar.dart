@@ -34,7 +34,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => AppBar(
-        backgroundColor: Colors.white,
         title: const Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -44,7 +43,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               height: 30,
             ),
             SizedBox(width: 10),
-            Text('eTiket Situ Bagendit'),
+            Text('eTiket Pariwisata'),
           ],
         ),
         automaticallyImplyLeading: false,

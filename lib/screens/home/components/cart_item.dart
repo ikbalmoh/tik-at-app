@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gartix/models/transaction.dart';
+import 'package:gartix/models/transaction_payload.dart';
 import 'package:gartix/utils/utils.dart';
 
 class CartItem extends StatelessWidget {
@@ -10,7 +10,7 @@ class CartItem extends StatelessWidget {
     required this.onDelete,
   });
 
-  final TransactionItem item;
+  final TransactionPayloadItem item;
   final Function onDelete;
 
   @override

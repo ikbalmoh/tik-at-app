@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gartix/models/ticket_type.dart';
-import 'package:gartix/models/transaction.dart';
+import 'package:gartix/models/transaction_payload.dart';
 import 'package:gartix/modules/transaction/transaction.dart';
 import 'package:gartix/utils/utils.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -20,7 +20,7 @@ class _AddTicketDialogState extends State<AddTicketDialog> {
 
   TextEditingController qty = TextEditingController();
 
-  TransactionItem? item;
+  TransactionPayloadItem? item;
 
   @override
   void initState() {
@@ -96,24 +96,33 @@ class _AddTicketDialogState extends State<AddTicketDialog> {
                       item == null ? 'Tambah Tiket' : 'Edit Tiket',
                       style: textTheme.headlineSmall,
                     ),
-                    Badge(
-                      label: Text(
-                        widget.ticket.name,
-                        style: textTheme.bodyLarge,
+                    GestureDetector(
+                      onTap: () => Get.back(),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.close,
+                          color: Colors.grey.shade500,
+                          size: 14,
+                        ),
                       ),
-                      backgroundColor: widget.ticket.color,
-                      largeSize: 28,
-                      smallSize: 24,
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
                     ),
                   ],
                 ),
               ),
+              rowField(
+                'Jenis Tiket',
+                Text(
+                  widget.ticket.name,
+                  style: textTheme.bodyLarge,
+                ),
+                textTheme,
+              ),
               const SizedBox(
-                height: 7.5,
+                height: 10,
               ),
               rowField(
-                'Harga Tiket',
+                'Harga',
                 CurrencyFormat.idr(widget.ticket.price, 0),
                 textTheme,
               ),
@@ -143,24 +152,25 @@ class _AddTicketDialogState extends State<AddTicketDialog> {
                 ),
                 textTheme,
               ),
-              const SizedBox(
-                height: 15,
-              ),
               Container(
                 margin: const EdgeInsets.only(top: 20),
+                padding: const EdgeInsets.only(top: 10),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    top: BorderSide(
+                      width: 0.5,
+                      color: Colors.black12,
+                    ),
+                  ),
+                ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     TextButton(
-                      onPressed: () => Get.back(),
-                      style: TextButton.styleFrom(foregroundColor: Colors.grey),
-                      child: const Text('Batal'),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    TextButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.blue.shade50)),
                       onPressed: () => submit(),
                       child: Text(item == null ? 'Simpan' : 'Perbaharui'),
                     ),
