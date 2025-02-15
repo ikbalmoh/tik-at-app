@@ -29,6 +29,7 @@ class _TicketContainerState extends State<TicketContainer> {
 
   @override
   Widget build(BuildContext context) {
+    bool isMobile = ResponsiveBreakpoints.of(context).smallerOrEqualTo(MOBILE);
     return Obx(() {
       if (controller.state is TicketFailure) {
         TicketFailure state = controller.state as TicketFailure;
@@ -58,8 +59,7 @@ class _TicketContainerState extends State<TicketContainer> {
                 padding: const EdgeInsets.all(15),
                 physics: const ScrollPhysics(),
                 shrinkWrap: false,
-                crossAxisCount:
-                    ResponsiveBreakpoints.of(context).isMobile ? 1 : 3,
+                crossAxisCount: isMobile ? 1 : 2,
                 mainAxisSpacing: 15,
                 crossAxisSpacing: 15,
                 childAspectRatio: 1.5,

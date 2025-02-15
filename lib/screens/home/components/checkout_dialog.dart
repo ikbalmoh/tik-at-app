@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gartix/components/payment_method_button.dart';
@@ -21,10 +22,12 @@ class _CheckoutDialogState extends State<CheckoutDialog> {
   String paymentMethod = 'cash';
   TextEditingController payController = TextEditingController(text: '0');
   TextEditingController payRefController = TextEditingController();
+  TextEditingController noteController = TextEditingController();
 
   double pay = 0;
   double change = 0;
   bool paymentPassed = false;
+  bool isGroup = false;
 
   final _formatter = CurrencyFormat.currencyInput();
 
@@ -58,16 +61,20 @@ class _CheckoutDialogState extends State<CheckoutDialog> {
   }
 
   void setPaymentMethod(String type) {
+    double grandTotal = (controller.state as TransactionInProgress).grandTotal;
+    double amount = type == 'cash' ? 0 : grandTotal;
+    final amountText = _formatter.formatDouble(amount);
+    payController.text = amountText;
     setState(() {
       paymentMethod = type;
+      change = 0;
+      pay = amount;
+      paymentPassed = amount >= grandTotal;
     });
-    double grandTotal = (controller.state as TransactionInProgress).grandTotal;
-    final amountText = _formatter.formatDouble(grandTotal);
-    payController.text = type == 'cash' ? '0' : amountText;
     if (type == 'cash') {
       payNode.requestFocus();
       payController.selection =
-          const TextSelection(baseOffset: 0, extentOffset: 0);
+          const TextSelection(baseOffset: 0, extentOffset: 1);
     } else {
       payRefNode.requestFocus();
     }
@@ -76,9 +83,11 @@ class _CheckoutDialogState extends State<CheckoutDialog> {
   void submitTransaction() {
     controller.submitTransaction(
       paymentMethod: paymentMethod,
-      pay: double.parse(payController.text),
+      pay: pay,
       refNo: payRefController.text,
-      printTicket: false,
+      printTicket: true,
+      isGroup: isGroup,
+      note: noteController.text,
     );
   }
 
@@ -107,82 +116,169 @@ class _CheckoutDialogState extends State<CheckoutDialog> {
     return Obx(
       () {
         if (controller.state is TransactionInProgress) {
-          var paymentCard = Container(
-            width: isMobile ? double.infinity : 400,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
+          final cart = controller.state as TransactionInProgress;
+          var transactionCard = Container(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: double.maxFinite,
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                              width: 1, color: Colors.grey.shade100))),
+                  child: Text(
+                    'Pembelian Tiket',
+                    style: textTheme.bodyMedium
+                        ?.copyWith(color: Colors.grey.shade600),
+                  ),
+                ),
+                const SizedBox(height: 7.5),
+                ListView.builder(
+                  itemBuilder: (context, idx) {
+                    final ticket = cart.tickets[idx];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 2.5),
+                      child: Row(
+                        children: [
+                          Text(
+                            CurrencyFormat.idr(ticket.qty, 0, symbol: false),
+                            style: textTheme.bodyLarge,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Expanded(
+                            child: Text(ticket.name),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(CurrencyFormat.idr(ticket.total, 0)),
+                        ],
+                      ),
+                    );
+                  },
+                  itemCount: cart.tickets.length,
+                  shrinkWrap: true,
+                )
+              ],
             ),
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 12, horizontal: 15),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 1,
-                        color: Colors.green.shade700,
-                      ),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: rowField(
-                      'Total',
-                      Text(
-                        CurrencyFormat.idr(
-                            (controller.state as TransactionInProgress)
-                                .grandTotal
-                                .toDouble(),
-                            0),
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium
-                            ?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.green.shade700,
+          );
+          var paymentCard = SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            padding: EdgeInsets.symmetric(
+                    vertical: isMobile ? 10 : 20, horizontal: 20)
+                .copyWith(bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                rowField(
+                  'Total Transaksi',
+                  Text(
+                    CurrencyFormat.idr(
+                        (controller.state as TransactionInProgress)
+                            .grandTotal
+                            .toDouble(),
+                        0),
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red.shade700,
+                        ),
+                  ),
+                  textTheme,
+                ),
+                const SizedBox(height: 15),
+                rowField(
+                  'Tiket Kelompok',
+                  Switch(
+                      value: isGroup,
+                      onChanged: (val) {
+                        setState(() {
+                          isGroup = val;
+                        });
+                      }),
+                  textTheme,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  'Pilih Metode Pembayaran',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge
+                      ?.copyWith(color: Colors.grey.shade800),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                isMobile
+                    ? Column(
+                        children: [
+                          PaymentMethodButton(
+                            name: 'TUNAI',
+                            active: paymentMethod == 'cash',
+                            value: 'cash',
+                            onSelect: setPaymentMethod,
+                          ),
+                          PaymentMethodButton(
+                            name: 'NON TUNAI',
+                            active: paymentMethod == 'qris',
+                            value: 'qris',
+                            onSelect: setPaymentMethod,
+                          ),
+                        ],
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: PaymentMethodButton(
+                              name: 'TUNAI',
+                              active: paymentMethod == 'cash',
+                              value: 'cash',
+                              onSelect: setPaymentMethod,
                             ),
+                          ),
+                          Expanded(
+                            child: PaymentMethodButton(
+                              name: 'NON TUNAI',
+                              active: paymentMethod == 'qris',
+                              value: 'qris',
+                              onSelect: setPaymentMethod,
+                            ),
+                          ),
+                        ],
                       ),
-                      textTheme,
-                    ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.grey.shade50,
                   ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  const Text('Pilih Metode Pembayaran'),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  PaymentMethodButton(
-                    name: 'TUNAI',
-                    active: paymentMethod == 'cash',
-                    value: 'cash',
-                    onSelect: setPaymentMethod,
-                  ),
-                  PaymentMethodButton(
-                    name: 'NON TUNAI / QRIS',
-                    active: paymentMethod == 'qris',
-                    value: 'qris',
-                    onSelect: setPaymentMethod,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  rowField(
-                    'Bayar',
+                  child: rowField(
+                    'Jumlah Bayar',
                     Flexible(
                       fit: FlexFit.tight,
                       child: TextFormField(
-                        style: textTheme.headlineSmall?.copyWith(
-                          color: paymentPassed
-                              ? Colors.green.shade700
-                              : Colors.red.shade700,
-                        ),
+                        style: textTheme.headlineMedium?.copyWith(
+                            color: paymentPassed
+                                ? Colors.green.shade700
+                                : Colors.blue.shade700,
+                            fontWeight: FontWeight.bold),
                         textAlign: TextAlign.right,
                         controller: payController,
                         onTap: () => payController.selection = TextSelection(
@@ -196,7 +292,7 @@ class _CheckoutDialogState extends State<CheckoutDialog> {
                         focusNode: payNode,
                         decoration: const InputDecoration(
                           border: InputBorder.none,
-                          hintText: 'Total Bayar',
+                          hintText: 'Masukkan Nominal',
                           contentPadding: EdgeInsets.zero,
                           isDense: true,
                           hintStyle: TextStyle(
@@ -213,113 +309,139 @@ class _CheckoutDialogState extends State<CheckoutDialog> {
                     ),
                     textTheme,
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  paymentMethod == 'cash'
-                      ? rowField(
-                          'Kembali',
-                          Text(
-                            CurrencyFormat.idr(change, 0),
-                            style: textTheme.headlineSmall
-                                ?.copyWith(color: Colors.grey.shade600),
-                          ),
-                          textTheme)
-                      : rowField(
-                          'No. Ref',
-                          Flexible(
-                            fit: FlexFit.tight,
-                            child: TextFormField(
-                              style: textTheme.headlineSmall,
-                              textAlign: TextAlign.right,
-                              controller: payRefController,
-                              focusNode: payRefNode,
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'No. Referensi',
-                                contentPadding: EdgeInsets.zero,
-                                isDense: true,
-                                hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.w200,
-                                  fontSize: 14,
-                                ),
-                              ),
-                              scrollPadding: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).viewInsets.bottom +
-                                        10,
-                              ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                paymentMethod == 'cash'
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              'Kembali',
+                              style: textTheme.labelLarge
+                                  ?.copyWith(color: Colors.grey.shade600),
                             ),
-                          ),
-                          textTheme,
+                            const SizedBox(
+                              width: 30,
+                            ),
+                            Text(
+                              CurrencyFormat.idr(change, 0),
+                              style: textTheme.headlineSmall
+                                  ?.copyWith(color: Colors.grey.shade800),
+                            ),
+                          ],
                         ),
-                  const SizedBox(
-                    height: 25,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(top: 15),
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        top: BorderSide(
-                          width: 0.5,
-                          color: Colors.black12,
+                      )
+                    : TextFormField(
+                        controller: payRefController,
+                        focusNode: payRefNode,
+                        decoration: InputDecoration(
+                          filled: true,
+                          labelText: 'No. Ref',
+                          hintText: 'Nomor referensi transaksi',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: BorderSide.none),
+                          fillColor: Colors.grey.shade50,
+                          focusColor: Colors.grey.shade50,
                         ),
                       ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        TextButton(
-                          onPressed: () => Get.back(),
-                          style: TextButton.styleFrom(
-                            foregroundColor: Colors.grey.shade700,
-                          ),
-                          child: const Text('Batal'),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        ElevatedButton.icon(
-                          icon: controller.loading
-                              ? const SizedBox(
-                                  height: 10,
-                                  width: 10,
-                                  child: Center(
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                    ),
-                                  ),
-                                )
-                              : const Icon(
-                                  CupertinoIcons.printer,
-                                  size: 18,
-                                ),
-                          onPressed: (paymentPassed && !controller.loading)
-                              ? () =>
-                                  settingController.printer is PrinterConnected
-                                      ? submitTransaction()
-                                      : settingController.openPrinterSetting()
-                              : null,
-                          label: const Text('DIBAYAR'),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+                const SizedBox(
+                  height: 20,
+                ),
+                TextFormField(
+                  controller: noteController,
+                  decoration: InputDecoration(
+                    filled: true,
+                    labelText: 'Catatan',
+                    hintText: 'Masukkan catatan untuk transaksi ini',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide.none),
+                    fillColor: Colors.grey.shade50,
+                    focusColor: Colors.grey.shade50,
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+              ],
             ),
           );
+
           return Scaffold(
             appBar: AppBar(
               title: const Text('Pembayaran Tiket'),
               elevation: 3,
+              actions: [
+                ElevatedButton.icon(
+                  icon: controller.loading
+                      ? const SizedBox(
+                          height: 10,
+                          width: 10,
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                            ),
+                          ),
+                        )
+                      : const Icon(
+                          CupertinoIcons.printer,
+                          size: 18,
+                        ),
+                  onPressed: (paymentPassed && !controller.loading)
+                      ? () => settingController.printer is PrinterConnected ||
+                              kDebugMode
+                          ? submitTransaction()
+                          : settingController.openPrinterSetting()
+                      : null,
+                  label: const Text('TRANSAKSI SELESAI'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+              ],
             ),
             backgroundColor: Colors.grey.shade100,
             body: Padding(
               padding: const EdgeInsets.all(15),
-              child: paymentCard,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: isMobile
+                    ? SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [transactionCard, paymentCard],
+                        ),
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 3,
+                            child: transactionCard,
+                          ),
+                          Container(
+                            height: double.maxFinite,
+                            width: 1,
+                            color: Colors.blueGrey.shade50,
+                          ),
+                          Expanded(child: paymentCard)
+                        ],
+                      ),
+              ),
             ),
           );
         }

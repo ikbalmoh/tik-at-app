@@ -37,7 +37,7 @@ class TicketController extends GetxController {
       }
       _state.value = TicketLoaded(tickets: tickets);
     } on DioException catch (e) {
-      String message = e.response?.data['message'] ?? e.message;
+      String message = e.message!;
       _state.value = TicketFailure(message: message);
       if (box.hasData('tickets')) {
         final List<dynamic> savedTickets = box.read('tickets');

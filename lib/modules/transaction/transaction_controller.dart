@@ -43,8 +43,9 @@ class TransactionController extends GetxController {
     TransactionPayloadItem? item =
         items.firstWhereOrNull((t) => t.ticketTypeId == ticket.id);
     if (item != null) {
+      double price = ticket.currentPrice();
       item.qty = qty;
-      item.subtotal = qty * item.price;
+      item.subtotal = qty * price;
       item.total = item.subtotal - item.discount;
       _state.value = cart.copyWith(
           tickets: cart.tickets
@@ -57,10 +58,10 @@ class TransactionController extends GetxController {
           TransactionPayloadItem(
             ticketTypeId: ticket.id,
             name: ticket.name,
-            price: ticket.price,
+            price: ticket.currentPrice(),
             qty: qty,
-            subtotal: ticket.price * qty,
-            total: (ticket.price * qty),
+            subtotal: ticket.currentPrice() * qty,
+            total: (ticket.currentPrice() * qty),
           ),
         ],
       );
@@ -126,7 +127,9 @@ class TransactionController extends GetxController {
     required String paymentMethod,
     required double pay,
     String? refNo,
-    required bool printTicket,
+    bool printTicket = true,
+    bool isGroup = false,
+    String? note,
   }) async {
     if (_state.value is! TransactionInProgress) {
       return;
@@ -140,17 +143,18 @@ class TransactionController extends GetxController {
       }
       final TransactionPayload payload = TransactionPayload(
         purchaseDate: DateTime.now(),
-        isGroup: false,
+        isGroup: isGroup,
         grandTotal: cart.grandTotal,
         pay: pay,
         charge: charge,
         paymentMethod: paymentMethod,
         tickets: cart.tickets,
+        note: note,
       );
 
       final data = await _service.postTransaction(payload.toJson());
 
-      Get.back(closeOverlays: true);
+      // Get.back(closeOverlays: true);
       Get.showSnackbar(GetSnackBar(
         title: 'Transaksi Berhasil',
         message: 'Mencetak ${data["tickets"].length} tiket...',
@@ -175,7 +179,7 @@ class TransactionController extends GetxController {
       return printTransactionTickets();
     } on DioException catch (e) {
       _loading.value = false;
-      String? message = e.response?.data['message'] ?? e.message;
+      String? message = e.message;
       Get.snackbar(
         'Transaksi Tiket Gagal',
         message ?? 'Terjadi kesalahan',
@@ -240,6 +244,9 @@ class TransactionController extends GetxController {
     }
     bool? isConnected = await bluetooth.isConnected ?? false;
     if (!isConnected) {
+      if (kDebugMode) {
+        return Future.value();
+      }
       throw Future.error('printer tidak terkoneksi');
     }
     String separator = '--------------------------------';
@@ -291,6 +298,9 @@ class TransactionController extends GetxController {
     }
     bool? isConnected = await bluetooth.isConnected ?? false;
     if (!isConnected) {
+      if (kDebugMode) {
+        return Future.value();
+      }
       throw Future.error('printer tidak terkoneksi');
     }
     String separator = '--------------------------------';

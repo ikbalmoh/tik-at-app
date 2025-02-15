@@ -27,9 +27,33 @@ class _HomeState extends State<Home> {
     super.initState();
   }
 
+  void openCartBottomSheet() {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      showDragHandle: true,
+      enableDrag: true,
+      context: context,
+      builder: (context) => DraggableScrollableSheet(
+        builder: (context, controller) => Padding(
+          padding: const EdgeInsets.only(left: 8, right: 8, bottom: 10),
+          child: Cart(scrollController: controller,),
+        ),
+        minChildSize: 0.5,
+        maxChildSize: 0.8,
+        initialChildSize: 0.6,
+        expand: false,
+      ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool isMobile = ResponsiveBreakpoints.of(context).isMobile;
+    bool isMobile = ResponsiveBreakpoints.of(context).smallerOrEqualTo(TABLET);
     return Obx(
       () {
         return Scaffold(
@@ -66,48 +90,33 @@ class _HomeState extends State<Home> {
                     ],
                   ),
           ),
-          floatingActionButton: (transactionController.state
-                      is TransactionInProgress &&
-                  (transactionController.state as TransactionInProgress)
-                      .tickets
-                      .isNotEmpty &&
-                  isMobile)
-              ? Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: FloatingActionButton(
-                    tooltip: 'Kerangjang',
-                    onPressed: () {
-                      showModalBottomSheet(
-                        showDragHandle: true,
-                        enableDrag: true,
-                        context: context,
-                        builder: (context) => const Padding(
-                          padding:
-                              EdgeInsets.only(left: 8, right: 8, bottom: 10),
-                          child: Cart(),
-                        ),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(30),
+          floatingActionButton:
+              (transactionController.state is TransactionInProgress &&
+                      (transactionController.state as TransactionInProgress)
+                          .tickets
+                          .isNotEmpty &&
+                      isMobile)
+                  ? Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: FloatingActionButton.extended(
+                        tooltip: 'Kerangjang',
+                        label: const Text('Tiket Dipilih'),
+                        onPressed: openCartBottomSheet,
+                        icon: Badge(
+                          label: Text(
+                            transactionController.state is TransactionInProgress
+                                ? (transactionController.state
+                                        as TransactionInProgress)
+                                    .tickets
+                                    .fold(0, (sum, t) => sum + t.qty)
+                                    .toString()
+                                : '0',
                           ),
+                          child: const Icon(CupertinoIcons.tickets),
                         ),
-                      );
-                    },
-                    child: Badge(
-                      label: Text(
-                        transactionController.state is TransactionInProgress
-                            ? (transactionController.state
-                                    as TransactionInProgress)
-                                .tickets
-                                .fold(0, (sum, t) => sum + t.qty)
-                                .toString()
-                            : '0',
                       ),
-                      child: const Icon(CupertinoIcons.cart),
-                    ),
-                  ),
-                )
-              : Container(),
+                    )
+                  : Container(),
         );
       },
     );

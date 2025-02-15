@@ -27,7 +27,9 @@ class Ticket {
         ticketTypeName = json['ticket_type_name'],
         ticketPrice = double.tryParse(json['ticket_price'].toString()) ?? 0,
         isGroup = json['is_group'] as bool,
-        purchaseDate = DateTime.parse(json['purchase_date']);
+        purchaseDate = json['purchase_date'] != null
+            ? DateTime.parse(json['purchase_date'])
+            : DateTime.now();
 
   @override
   String toString() {

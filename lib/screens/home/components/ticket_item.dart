@@ -45,7 +45,7 @@ class TicketItem extends StatelessWidget {
                   height: 5,
                 ),
                 Text(
-                  CurrencyFormat.idr(ticket.price, 0),
+                  CurrencyFormat.idr(ticket.currentPrice(), 0),
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,

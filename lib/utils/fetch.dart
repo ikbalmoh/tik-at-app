@@ -61,9 +61,19 @@ class CustomInterceptors extends Interceptor {
     bool json = err.response?.data != null
         ? isJSON(jsonEncode(err.response?.data))
         : false;
-    if (!json) {
-      err.response?.data = {'message': 'Tidak dapat terhubung ke server'};
+    String message = err.message ?? 'Unexpected Error Occured!';
+    if (err.response?.data is String) {
+      message = err.response?.data;
+    } else if (err.response?.data['msg'] != null) {
+      message = err.response?.data?['msg'];
+    } else if (err.response?.data['message'] != null) {
+      message = err.response?.data?['message'];
+    } else if (err.response?.statusCode == 422) {
+      message = 'Invalid data. Please check your input and try again.';
+    } else {
+      message = 'Unexpected Error Occured!';
     }
+    err = err.copyWith(message: message);
     if (kDebugMode) {
       print(
           'ERROR[${err.response?.statusCode}] \n => JSON: $json\n=> PATH: ${err.requestOptions.path}\n => DATA: $originalData');

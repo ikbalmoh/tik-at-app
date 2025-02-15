@@ -71,7 +71,7 @@ class SettingController extends GetxController {
     } on DioException catch (e) {
       _loading.value = false;
       String message =
-          e.response?.data['message'] ?? 'Tidak Dapat Terhubung Ke Server';
+          e.message ?? 'Tidak Dapat Terhubung Ke Server';
       return Future.error(message);
     } catch (e) {
       _loading.value = false;

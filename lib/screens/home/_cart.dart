@@ -9,7 +9,9 @@ import 'package:gartix/utils/utils.dart';
 import 'components/checkout_dialog.dart';
 
 class Cart extends StatefulWidget {
-  const Cart({super.key});
+  const Cart({super.key, this.scrollController});
+
+  final ScrollController? scrollController;
 
   @override
   State<Cart> createState() => _CartState();
@@ -20,12 +22,11 @@ class _CartState extends State<Cart> {
   SettingController settingController = Get.find();
 
   void openPayment() {
+    Get.back(closeOverlays: true);
+
     if (kDebugMode || settingController.printer is PrinterConnected) {
-      showCupertinoModalPopup(context: context, builder: (context) => const CheckoutDialog());
-      // Get.dialog(
-      //   const CheckoutDialog(),
-      //   barrierDismissible: false,
-      // );
+      showCupertinoModalPopup(
+          context: context, builder: (context) => const CheckoutDialog());
     } else {
       Get.dialog(
         AlertDialog(
@@ -88,6 +89,7 @@ class _CartState extends State<Cart> {
                     children: [
                       Expanded(
                         child: ListView(
+                          controller: widget.scrollController,
                           shrinkWrap: true,
                           padding: const EdgeInsets.all(10),
                           children: cart.tickets
@@ -105,38 +107,6 @@ class _CartState extends State<Cart> {
                               .toList(),
                         ),
                       ),
-                      // Container(
-                      //   decoration: const BoxDecoration(
-                      //     border: Border(
-                      //       top: BorderSide(
-                      //         width: 0.5,
-                      //         color: Color.fromARGB(31, 52, 50, 50),
-                      //       ),
-                      //       bottom: BorderSide(
-                      //         width: 0.5,
-                      //         color: Colors.black12,
-                      //       ),
-                      //     ),
-                      //   ),
-                      //   padding: const EdgeInsets.symmetric(
-                      //     horizontal: 15,
-                      //     vertical: 10,
-                      //   ),
-                      //   child: Column(
-                      //     children: [
-                      //       summary(
-                      //         'Subtotal',
-                      //         CurrencyFormat.idr(cart.subtotal.toDouble(), 0),
-                      //         textTheme,
-                      //       ),
-                      //       summary(
-                      //         'Total Diskon',
-                      //         CurrencyFormat.idr(cart.discount.toDouble(), 0),
-                      //         textTheme,
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 15,

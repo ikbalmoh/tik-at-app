@@ -42,6 +42,7 @@ class TransactionPayload {
   double charge;
   String paymentMethod;
   String? paymentRef;
+  String? note;
   List<TransactionPayloadItem> tickets;
   DateTime purchaseDate;
 
@@ -52,6 +53,7 @@ class TransactionPayload {
     required this.charge,
     required this.paymentMethod,
     this.paymentRef,
+    this.note,
     required this.tickets,
     required this.purchaseDate,
   });
@@ -68,6 +70,7 @@ class TransactionPayload {
         'charge': charge,
         'payment_method': paymentMethod,
         'payment_ref': paymentRef,
+        'note': note,
         'grand_total': grandTotal,
         'tickets': tickets.map((ticket) => ticket.toJson()).toList()
       };

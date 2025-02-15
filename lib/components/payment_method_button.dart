@@ -29,7 +29,7 @@ class PaymentMethodButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         onTap: () => onSelect(value),
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
           child: Row(
             children: [
               Icon(

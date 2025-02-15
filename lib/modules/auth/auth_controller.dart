@@ -65,7 +65,7 @@ class AuthController extends GetxController {
       if (kDebugMode) {
         print('LOGIN ERROR: ${e.message}');
       }
-      String message = e.response?.data['message'] ?? e.message;
+      String message = e.message!;
       Get.snackbar(
         'Login Gagal',
         message,
@@ -101,7 +101,7 @@ class AuthController extends GetxController {
         Get.offAllNamed(Routes.home);
       }
     } on DioException catch (e) {
-      String message = e.response?.data['message'] ?? e.message;
+      String message = e.message!;
       _authState.value = AuthFailure(message: message);
       box.remove('user');
       box.remove('token');
