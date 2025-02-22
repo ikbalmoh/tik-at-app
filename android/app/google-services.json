@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "776521449780",
+    "project_id": "gartix-app",
+    "storage_bucket": "gartix-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:776521449780:android:b8cf9f6ed98a2e29cf6561",
+        "android_client_info": {
+          "package_name": "dev.ikbalmoh.gartix"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGinXxum1xdntlSPANKftQfkKMkHqrjJE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

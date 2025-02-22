@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -8,23 +8,32 @@ import 'package:gartix/modules/auth/auth.dart';
 import 'package:get/get.dart';
 import 'package:gartix/modules/setting/setting.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 Future initServices() async {
   if (kDebugMode) {
     print('INITIALIZING APP ...');
   }
 
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   FlutterError.onError = (details) {
     FlutterError.presentError(details);
     if (kDebugMode) {
       print('ERROR DETAILS: $details');
+    } else {
+      FirebaseCrashlytics.instance.recordFlutterFatalError(details);
     }
-    if (kReleaseMode) exit(1);
   };
 
   PlatformDispatcher.instance.onError = (error, stack) {
     if (kDebugMode) {
       print('ERROR OCCURED:\n error => $error\n stack => $stack');
+    } else {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     }
     return true;
   };
