@@ -257,7 +257,7 @@ class TransactionController extends GetxController {
 
     await bluetooth.printImageBytes(imageBytesFromAsset);
     await bluetooth.printNewLine();
-    await bluetooth.printCustom('Situ Bagendit', 3, 1);
+    await bluetooth.printCustom('Candi Cangkuang', 3, 1);
     await bluetooth.printNewLine();
     await bluetooth.printCustom(separator, 1, 1);
     await bluetooth.printLeftRight('Waktu',
@@ -286,7 +286,7 @@ class TransactionController extends GetxController {
     await bluetooth.printCustom('Terimakasih atas Kunjungan Anda', 1, 1);
     await bluetooth.printNewLine();
     await bluetooth.printCustom(
-        'Dinas Parisiwisata dan\nKebudayaan Garut', 1, 1);
+        'Dinas Parisiwisata dan Kebudayaan\nKabupaten Garut', 1, 1);
     await bluetooth.paperCut();
 
     return Future.value();
