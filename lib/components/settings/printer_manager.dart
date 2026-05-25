@@ -17,7 +17,7 @@ class _PrinterManagerState extends State<PrinterManager> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (controller.devices.isEmpty) {
+      if (GetPlatform.isAndroid && controller.devices.isEmpty) {
         controller.scanPrinters();
       }
     });
@@ -81,58 +81,73 @@ class _PrinterManagerState extends State<PrinterManager> {
                       'Printer',
                       style: textTheme.headlineSmall,
                     ),
-                    controller.loading
-                        ? const Padding(
-                            padding: EdgeInsets.all(12.0),
-                            child: SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          )
-                        : IconButton(
-                            padding: const EdgeInsets.all(0),
-                            onPressed: () => controller.scanPrinters(),
-                            icon: const Icon(
-                              CupertinoIcons.search,
-                              size: 18,
-                            ),
-                          )
+                    !GetPlatform.isAndroid
+                        ? const SizedBox()
+                        : controller.loading
+                            ? const Padding(
+                                padding: EdgeInsets.all(12.0),
+                                child: SizedBox(
+                                  width: 18,
+                                  height: 18,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              )
+                            : IconButton(
+                                padding: const EdgeInsets.all(0),
+                                onPressed: () => controller.scanPrinters(),
+                                icon: const Icon(
+                                  CupertinoIcons.search,
+                                  size: 18,
+                                ),
+                              )
                   ],
                 ),
               ),
-              controller.devices.isNotEmpty
-                  ? Column(
-                      children: controller.devices
-                          .map((d) => ListTile(
-                                contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 0,
-                                  vertical: 0,
-                                ),
-                                title: Text(d.name ?? ''),
-                                subtitle: Text(d.address ?? '-'),
-                                onTap: () => controller.selectPrinter(d, true),
-                                trailing:
-                                    deviceIndicator(controller.printer, d),
-                              ))
-                          .toList(),
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 40),
+              !GetPlatform.isAndroid
+                  ? const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 40),
                       child: Center(
                         child: Text(
-                          controller.loading
-                              ? 'Mencari Perangkat'
-                              : 'Tidak Ada Perangkat Terdeteksi',
-                          style: const TextStyle(
+                          'Printer tidak didukung di iOS',
+                          style: TextStyle(
                             color: Colors.grey,
                           ),
                         ),
                       ),
-                    ),
+                    )
+                  : controller.devices.isNotEmpty
+                      ? Column(
+                          children: controller.devices
+                              .map((d) => ListTile(
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 0,
+                                      vertical: 0,
+                                    ),
+                                    title: Text(d.name ?? ''),
+                                    subtitle: Text(d.address ?? '-'),
+                                    onTap: () =>
+                                        controller.selectPrinter(d, true),
+                                    trailing:
+                                        deviceIndicator(controller.printer, d),
+                                  ))
+                              .toList(),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 40),
+                          child: Center(
+                            child: Text(
+                              controller.loading
+                                  ? 'Mencari Perangkat'
+                                  : 'Tidak Ada Perangkat Terdeteksi',
+                              style: const TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                        ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.center,

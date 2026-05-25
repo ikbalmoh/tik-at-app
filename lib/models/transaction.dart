@@ -18,6 +18,7 @@ class Transaction with _$Transaction {
     required String paymentMethod,
     required String operatorName,
     required DateTime purchaseDate,
+    required String upt,
     required List<TransactionDetail> details,
   }) = _Transaction;
 

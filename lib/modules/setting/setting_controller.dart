@@ -17,7 +17,8 @@ class SettingController extends GetxController {
 
   SettingController(this._service);
 
-  BlueThermalPrinter bluetooth = BlueThermalPrinter.instance;
+  BlueThermalPrinter? bluetooth =
+      GetPlatform.isAndroid ? BlueThermalPrinter.instance : null;
 
   final _loading = false.obs;
 
@@ -40,10 +41,15 @@ class SettingController extends GetxController {
     if (box.hasData('api')) {
       setApiUrl(box.read('api'));
     }
-    initPrinter();
+    if (GetPlatform.isAndroid) {
+      initPrinter();
+    } else {
+      _printerState.value = PrinterNotConnected();
+    }
   }
 
   void initPrinter() {
+    if (!GetPlatform.isAndroid) return;
     listenPrinterState();
     if (box.hasData('printer')) {
       final BluetoothDevice device =
@@ -89,6 +95,18 @@ class SettingController extends GetxController {
   }
 
   void openPrinterSetting() {
+    if (!GetPlatform.isAndroid) {
+      Get.showSnackbar(
+        const GetSnackBar(
+          title: 'Printer',
+          message: 'Fitur printer tidak didukung di perangkat ini',
+          duration: Duration(seconds: 3),
+          backgroundColor: Colors.orange,
+          snackPosition: SnackPosition.TOP,
+        ),
+      );
+      return;
+    }
     Get.dialog(
       const Dialog(
         child: PrinterManager(),
@@ -98,7 +116,8 @@ class SettingController extends GetxController {
   }
 
   void listenPrinterState() {
-    bluetooth.onStateChanged().listen((state) {
+    if (bluetooth == null) return;
+    bluetooth!.onStateChanged().listen((state) {
       if (kDebugMode) {
         print('PRINTER STATUS: $state');
       }
@@ -159,10 +178,11 @@ class SettingController extends GetxController {
   }
 
   void scanPrinters() async {
+    if (!GetPlatform.isAndroid || bluetooth == null) return;
     List<BluetoothDevice> boundedDevices = [];
     try {
       _loading.value = true;
-      boundedDevices = await bluetooth.getBondedDevices();
+      boundedDevices = await bluetooth!.getBondedDevices();
       if (kDebugMode) {
         print('${boundedDevices.length} PRINTERS FOUND');
       }
@@ -174,11 +194,12 @@ class SettingController extends GetxController {
   }
 
   void selectPrinter(BluetoothDevice device, bool testPrinter) async {
+    if (!GetPlatform.isAndroid || bluetooth == null) return;
     try {
       if (kDebugMode) {
         print('SELECT PRINTER : ${device.toMap()}');
       }
-      bool availble = await bluetooth.isAvailable ?? false;
+      bool availble = await bluetooth!.isAvailable ?? false;
       if (!availble) {
         _printerState.value = PrinterNotConnected();
         if (kDebugMode) {
@@ -186,16 +207,16 @@ class SettingController extends GetxController {
         }
         return;
       }
-      bool currentConnected = await bluetooth.isConnected ?? false;
+      bool currentConnected = await bluetooth!.isConnected ?? false;
       if (currentConnected) {
-        await bluetooth.disconnect();
+        await bluetooth!.disconnect();
       }
       if (kDebugMode) {
         print('CONNECT TO PRINTER : ${device.toMap()}');
       }
       _printerState.value = PrinterConnecting(device: device);
-      await bluetooth.connect(device);
-      bool connected = await bluetooth.isConnected ?? false;
+      await bluetooth!.connect(device);
+      bool connected = await bluetooth!.isConnected ?? false;
       if (kDebugMode) {
         print('CONNECTED TO PRINTER : ${device.toMap()}');
       }
@@ -231,7 +252,8 @@ class SettingController extends GetxController {
   }
 
   Future printExample() async {
-    bool? isConnected = await bluetooth.isConnected ?? false;
+    if (!GetPlatform.isAndroid || bluetooth == null) return;
+    bool? isConnected = await bluetooth!.isConnected ?? false;
     if (!isConnected) {
       throw Future.error('printer tidak terkoneksi');
     }
@@ -240,9 +262,9 @@ class SettingController extends GetxController {
     Uint8List imageBytesFromAsset = bytesAsset.buffer
         .asUint8List(bytesAsset.offsetInBytes, bytesAsset.lengthInBytes);
 
-    bluetooth.printCustom("TEST PRINTER", 1, 1);
-    bluetooth.printNewLine();
-    bluetooth.printImageBytes(imageBytesFromAsset);
-    bluetooth.paperCut();
+    bluetooth!.printCustom("TEST PRINTER", 1, 1);
+    bluetooth!.printNewLine();
+    bluetooth!.printImageBytes(imageBytesFromAsset);
+    bluetooth!.paperCut();
   }
 }

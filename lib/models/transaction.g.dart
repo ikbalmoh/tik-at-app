@@ -15,6 +15,7 @@ _$TransactionImpl _$$TransactionImplFromJson(Map<String, dynamic> json) =>
       paymentMethod: json['payment_method'] as String,
       operatorName: json['operator_name'] as String,
       purchaseDate: DateTime.parse(json['purchase_date'] as String),
+      upt: json['upt'] as String,
       details: (json['details'] as List<dynamic>)
           .map((e) => TransactionDetail.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -29,6 +30,7 @@ Map<String, dynamic> _$$TransactionImplToJson(_$TransactionImpl instance) =>
       'payment_method': instance.paymentMethod,
       'operator_name': instance.operatorName,
       'purchase_date': instance.purchaseDate.toIso8601String(),
+      'upt': instance.upt,
       'details': instance.details,
     };
 

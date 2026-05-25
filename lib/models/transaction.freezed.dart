@@ -27,6 +27,7 @@ mixin _$Transaction {
   String get paymentMethod => throw _privateConstructorUsedError;
   String get operatorName => throw _privateConstructorUsedError;
   DateTime get purchaseDate => throw _privateConstructorUsedError;
+  String get upt => throw _privateConstructorUsedError;
   List<TransactionDetail> get details => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -49,6 +50,7 @@ abstract class $TransactionCopyWith<$Res> {
       String paymentMethod,
       String operatorName,
       DateTime purchaseDate,
+      String upt,
       List<TransactionDetail> details});
 }
 
@@ -72,6 +74,7 @@ class _$TransactionCopyWithImpl<$Res, $Val extends Transaction>
     Object? paymentMethod = null,
     Object? operatorName = null,
     Object? purchaseDate = null,
+    Object? upt = null,
     Object? details = null,
   }) {
     return _then(_value.copyWith(
@@ -103,6 +106,10 @@ class _$TransactionCopyWithImpl<$Res, $Val extends Transaction>
           ? _value.purchaseDate
           : purchaseDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      upt: null == upt
+          ? _value.upt
+          : upt // ignore: cast_nullable_to_non_nullable
+              as String,
       details: null == details
           ? _value.details
           : details // ignore: cast_nullable_to_non_nullable
@@ -127,6 +134,7 @@ abstract class _$$TransactionImplCopyWith<$Res>
       String paymentMethod,
       String operatorName,
       DateTime purchaseDate,
+      String upt,
       List<TransactionDetail> details});
 }
 
@@ -148,6 +156,7 @@ class __$$TransactionImplCopyWithImpl<$Res>
     Object? paymentMethod = null,
     Object? operatorName = null,
     Object? purchaseDate = null,
+    Object? upt = null,
     Object? details = null,
   }) {
     return _then(_$TransactionImpl(
@@ -179,6 +188,10 @@ class __$$TransactionImplCopyWithImpl<$Res>
           ? _value.purchaseDate
           : purchaseDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      upt: null == upt
+          ? _value.upt
+          : upt // ignore: cast_nullable_to_non_nullable
+              as String,
       details: null == details
           ? _value._details
           : details // ignore: cast_nullable_to_non_nullable
@@ -199,6 +212,7 @@ class _$TransactionImpl extends _Transaction {
       required this.paymentMethod,
       required this.operatorName,
       required this.purchaseDate,
+      required this.upt,
       required final List<TransactionDetail> details})
       : _details = details,
         super._();
@@ -220,6 +234,8 @@ class _$TransactionImpl extends _Transaction {
   final String operatorName;
   @override
   final DateTime purchaseDate;
+  @override
+  final String upt;
   final List<TransactionDetail> _details;
   @override
   List<TransactionDetail> get details {
@@ -230,7 +246,7 @@ class _$TransactionImpl extends _Transaction {
 
   @override
   String toString() {
-    return 'Transaction(id: $id, grandTotal: $grandTotal, pay: $pay, charge: $charge, paymentMethod: $paymentMethod, operatorName: $operatorName, purchaseDate: $purchaseDate, details: $details)';
+    return 'Transaction(id: $id, grandTotal: $grandTotal, pay: $pay, charge: $charge, paymentMethod: $paymentMethod, operatorName: $operatorName, purchaseDate: $purchaseDate, upt: $upt, details: $details)';
   }
 
   @override
@@ -249,6 +265,7 @@ class _$TransactionImpl extends _Transaction {
                 other.operatorName == operatorName) &&
             (identical(other.purchaseDate, purchaseDate) ||
                 other.purchaseDate == purchaseDate) &&
+            (identical(other.upt, upt) || other.upt == upt) &&
             const DeepCollectionEquality().equals(other._details, _details));
   }
 
@@ -263,6 +280,7 @@ class _$TransactionImpl extends _Transaction {
       paymentMethod,
       operatorName,
       purchaseDate,
+      upt,
       const DeepCollectionEquality().hash(_details));
 
   @JsonKey(ignore: true)
@@ -288,6 +306,7 @@ abstract class _Transaction extends Transaction {
       required final String paymentMethod,
       required final String operatorName,
       required final DateTime purchaseDate,
+      required final String upt,
       required final List<TransactionDetail> details}) = _$TransactionImpl;
   const _Transaction._() : super._();
 
@@ -308,6 +327,8 @@ abstract class _Transaction extends Transaction {
   String get operatorName;
   @override
   DateTime get purchaseDate;
+  @override
+  String get upt;
   @override
   List<TransactionDetail> get details;
   @override

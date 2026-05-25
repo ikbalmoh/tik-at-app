@@ -18,7 +18,8 @@ class TransactionController extends GetxController {
 
   TransactionController(this._service);
 
-  BlueThermalPrinter bluetooth = BlueThermalPrinter.instance;
+  BlueThermalPrinter? bluetooth =
+      GetPlatform.isAndroid ? BlueThermalPrinter.instance : null;
 
   final _state = const TransactionState().obs;
 
@@ -242,7 +243,9 @@ class TransactionController extends GetxController {
     if (kDebugMode) {
       print('PRINT TRANSACTION: ${transaction.toString()}');
     }
-    bool? isConnected = await bluetooth.isConnected ?? false;
+    if (!GetPlatform.isAndroid || bluetooth == null) return;
+
+    bool? isConnected = await bluetooth!.isConnected ?? false;
     if (!isConnected) {
       if (kDebugMode) {
         return Future.value();
@@ -255,39 +258,39 @@ class TransactionController extends GetxController {
     Uint8List imageBytesFromAsset = bytesAsset.buffer
         .asUint8List(bytesAsset.offsetInBytes, bytesAsset.lengthInBytes);
 
-    await bluetooth.printImageBytes(imageBytesFromAsset);
-    await bluetooth.printNewLine();
-    await bluetooth.printCustom('Candi Cangkuang', 3, 1);
-    await bluetooth.printNewLine();
-    await bluetooth.printCustom(separator, 1, 1);
-    await bluetooth.printLeftRight('Waktu',
+    await bluetooth!.printImageBytes(imageBytesFromAsset);
+    await bluetooth!.printNewLine();
+    await bluetooth!.printCustom(transaction.upt, 3, 1);
+    await bluetooth!.printNewLine();
+    await bluetooth!.printCustom(separator, 1, 1);
+    await bluetooth!.printLeftRight('Waktu',
         DateFormat('dd/MM/yy hh:mm').format(transaction.purchaseDate), 1);
-    await bluetooth.printLeftRight('Operator', transaction.operatorName, 1);
+    await bluetooth!.printLeftRight('Operator', transaction.operatorName, 1);
     int totalTicket = transaction.details
         .map((d) => d.qty)
         .reduce((value, element) => value + element);
-    await bluetooth.printLeftRight('Jumlah Tiket', totalTicket.toString(), 1);
-    await bluetooth.printCustom(separator, 1, 1);
+    await bluetooth!.printLeftRight('Jumlah Tiket', totalTicket.toString(), 1);
+    await bluetooth!.printCustom(separator, 1, 1);
     for (var i = 0; i < transaction.details.length; i++) {
       final detail = transaction.details[i];
-      await bluetooth.printLeftRight('${detail.qty} x ${detail.ticketTypeName}',
+      await bluetooth!.printLeftRight('${detail.qty} x ${detail.ticketTypeName}',
           CurrencyFormat.idr(detail.total, 0), 1);
     }
-    await bluetooth.printCustom(separator, 1, 1);
-    await bluetooth.printLeftRight(
+    await bluetooth!.printCustom(separator, 1, 1);
+    await bluetooth!.printLeftRight(
         'Total', CurrencyFormat.idr(transaction.grandTotal, 0), 1);
-    await bluetooth.printLeftRight(
+    await bluetooth!.printLeftRight(
         'Bayar', CurrencyFormat.idr(transaction.pay, 0), 1);
-    await bluetooth.printLeftRight(
+    await bluetooth!.printLeftRight(
         'Kembali', CurrencyFormat.idr(transaction.charge, 0), 1);
-    await bluetooth.printLeftRight('Pembayaran', transaction.paymentMethod, 1);
-    await bluetooth.printCustom(separator, 1, 1);
-    await bluetooth.printNewLine();
-    await bluetooth.printCustom('Terimakasih atas Kunjungan Anda', 1, 1);
-    await bluetooth.printNewLine();
-    await bluetooth.printCustom(
+    await bluetooth!.printLeftRight('Pembayaran', transaction.paymentMethod, 1);
+    await bluetooth!.printCustom(separator, 1, 1);
+    await bluetooth!.printNewLine();
+    await bluetooth!.printCustom('Terimakasih atas Kunjungan Anda', 1, 1);
+    await bluetooth!.printNewLine();
+    await bluetooth!.printCustom(
         'Dinas Parisiwisata dan Kebudayaan\nKabupaten Garut', 1, 1);
-    await bluetooth.paperCut();
+    await bluetooth!.paperCut();
 
     return Future.value();
   }
@@ -296,7 +299,9 @@ class TransactionController extends GetxController {
     if (kDebugMode) {
       print('PRINT TICKET: ${ticket.toString()}');
     }
-    bool? isConnected = await bluetooth.isConnected ?? false;
+    if (!GetPlatform.isAndroid || bluetooth == null) return;
+
+    bool? isConnected = await bluetooth!.isConnected ?? false;
     if (!isConnected) {
       if (kDebugMode) {
         return Future.value();
@@ -305,22 +310,22 @@ class TransactionController extends GetxController {
     }
     String separator = '--------------------------------';
 
-    await bluetooth.printCustom('TIKET MASUK', 3, 1);
-    await bluetooth.printNewLine();
-    await bluetooth.printCustom(separator, 1, 1);
-    await bluetooth.printLeftRight(
+    await bluetooth!.printCustom('TIKET MASUK', 3, 1);
+    await bluetooth!.printNewLine();
+    await bluetooth!.printCustom(separator, 1, 1);
+    await bluetooth!.printLeftRight(
         'Waktu', DateFormat('dd/MM/yy hh:mm').format(ticket.purchaseDate), 1);
-    await bluetooth.printLeftRight(
+    await bluetooth!.printLeftRight(
         'Berlaku untuk', '${ticket.entranceMax} orang', 1);
-    await bluetooth.printCustom(separator, 1, 1);
-    await bluetooth.printCustom('Scan tiket di pintu masuk', 1, 1);
-    await bluetooth.printQRcode(ticket.id, 250, 250, 1);
-    await bluetooth.printNewLine();
-    await bluetooth.printCustom('Terimakasih atas Kunjungan Anda', 1, 1);
-    await bluetooth.printNewLine();
-    await bluetooth.printCustom(
+    await bluetooth!.printCustom(separator, 1, 1);
+    await bluetooth!.printCustom('Scan tiket di pintu masuk', 1, 1);
+    await bluetooth!.printQRcode(ticket.id, 250, 250, 1);
+    await bluetooth!.printNewLine();
+    await bluetooth!.printCustom('Terimakasih atas Kunjungan Anda', 1, 1);
+    await bluetooth!.printNewLine();
+    await bluetooth!.printCustom(
         'Dinas Parisiwisata dan\nKebudayaan Garut', 1, 1);
-    await bluetooth.paperCut();
+    await bluetooth!.paperCut();
 
     return Future.value();
   }
