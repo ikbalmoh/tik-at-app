@@ -1,0 +1,66 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:gartix/modules/transaction/model/transaction_payload.dart';
+import 'package:gartix/shared/utils/utils.dart';
+
+class CartItem extends StatelessWidget {
+  const CartItem({
+    super.key,
+    required this.item,
+    required this.onDelete,
+  });
+
+  final TransactionPayloadItem item;
+  final Function onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    TextTheme textTheme = Theme.of(context).textTheme;
+    return Card(
+      elevation: 0,
+      color: Colors.white,
+      margin: const EdgeInsets.all(0),
+      shape: const Border(
+        bottom: BorderSide(
+          width: 0.5,
+          color: Colors.black12,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 0,
+          vertical: 10,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              item.qty.toString(),
+              style: textTheme.bodyLarge,
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Expanded(child: Text(item.name)),
+            Text(
+              CurrencyFormat.idr(item.total, 0),
+              style: textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(
+              width: 5,
+            ),
+            IconButton(
+              onPressed: () => onDelete(),
+              icon: const Icon(
+                CupertinoIcons.xmark_circle,
+                color: Colors.red,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}

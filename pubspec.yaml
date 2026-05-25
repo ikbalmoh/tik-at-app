@@ -39,6 +39,8 @@ dependencies:
   firebase_crashlytics: ^3.4.18
   flutter:
     sdk: flutter
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
   freezed: ^2.5.2
   freezed_annotation: ^2.4.4
   get: ^4.6.6
@@ -58,6 +60,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   json_serializable: ^6.8.0
+  riverpod_generator: ^2.4.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
